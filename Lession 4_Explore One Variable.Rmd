@@ -1,0 +1,159 @@
+---
+title: "Lession 4_Explore One Variable"
+output: html_document
+---
+
+```{r}
+library(ggplot2) 
+data(diamonds)
+```
+
+## R Markdown
+
+```{r}
+summary(diamonds)
+```
+
+## Create a histogram of the price of
+all the diamonds in the diamond data set.
+
+```{r}
+qplot(x = price, data = diamonds)
+d1 <- NA
+diamonds$d1 <- ifelse(diamonds$price < 500, 1, 0)
+diamonds$d1 <- factor(diamonds$d1)
+summary(diamonds$d1)
+
+d2 <- NA
+diamonds$d2 <- ifelse(diamonds$price < 250, 1, 0)
+diamonds$d2 <- factor(diamonds$d2)
+summary(diamonds$d2)
+
+d3 <- NA
+diamonds$d3 <- ifelse(diamonds$price == 15000, 1, 0)
+diamonds$d3 <- factor(diamonds$d3)
+summary(diamonds$d3)
+```
+
+## Explore the largest peak in the
+# price histogram you created earlier.
+
+# Try limiting the x-axis, altering the bin width,
+# and setting different breaks on the x-axis.
+```{r}
+qplot(x = price, data = diamonds, xlim = c(0, 15000))
+qplot(x = price, data = diamonds) +
+  scale_x_continuous(limits = c(0, 15000), breaks = seq(0, 15000, 1000))
+ggsave('priceHistogram.png')
+
+
+price1 <- qplot(x = price, data = diamonds) +
+  scale_x_continuous(limits = c(0, 3000), breaks = seq(0, 3000, 100))
+
+price2 <- qplot(x = price, data = diamonds) +
+  scale_x_continuous(limits = c(3000, 6000), breaks = seq(3000, 6000, 100))
+
+price3 <- qplot(x = price, data = diamonds) +
+  scale_x_continuous(limits = c(6000, 9000), breaks = seq(6000, 9000, 100))
+
+price4 <- qplot(x = price, data = diamonds) +
+  scale_x_continuous(limits = c(9000, 12000), breaks = seq(9000, 12000, 100))
+
+price5 <- qplot(x = price, data = diamonds) +
+  scale_x_continuous(limits = c(12000, 15000), breaks = seq(12000, 15000, 100))
+
+library(gridExtra)
+
+# arrange plots in grid
+grid.arrange(price1, price2, price3, price4, price5, ncol = 3)
+
+
+qplot(x = price, data = diamonds) +
+  scale_x_continuous(limits = c(0, 15000), breaks = 0:1000) +
+  facet_wrap(~cut, ncol = 3)
+
+by(diamonds$price, diamonds$cut, summary)
+by(diamonds$price, diamonds$cut, summary, digits = max(getOption('digits')))
+```
+## Run the code below in R Studio to generate
+# the histogram as a reminder.
+```{r}
+qplot(x = price, data = diamonds) + facet_grid(~cut, scales="free", space="free")
+
+qplot(x = price, data = diamonds) + facet_grid(~cut, scales="free_y")
+
+```
+## Create a histogram of price per carat
+# and facet it by cut.
+```{r}
+qplot(x = price / carat, data = diamonds, binwidth = 50) +
+  scale_x_continuous(limits = c(0,15000), breaks = seq(0, 15000, 3000)) +
+  facet_wrap(~cut, ncol = 3)
+```
+## Box Plots
+need to add coord_cartesian()
+For boxplots, we use the "y" parameter for the continuous data and the "x" parameter for the categorical data.
+```{r}
+qplot(x = cut, y = price,
+      data = subset(diamonds, !is.na(cut)),
+      geom = 'boxplot') +
+  coord_cartesian(ylim = c(0, 15000))
+
+qplot(x = color, y = price,
+      data = subset(diamonds, !is.na(color)),
+      geom = 'boxplot') 
+
+ggsave('priceHistogram.png')
+```
+#IQR
+```{r}
+by(diamonds$price,diamonds$color, summary)
+IQR(subset(diamonds, color=='D')$price)
+IQR(subset(diamonds, color=='J')$price)
+
+```
+## Investigate the price per carat of diamonds across
+# the different colors of diamonds using boxplots.
+```{r}
+qplot(x = price / carat, data = diamonds, binwidth = 50) +
+  scale_x_continuous(limits = c(1000,9000), breaks = seq(1000, 9000, 1000)) +
+  facet_wrap(~color, ncol = 2)
+
+```
+# Frequency Polygon
+```{r}
+qplot(x = carat, data = subset(diamonds, !is.na(carat)), 
+      geom = 'freqpoly', binwidth = 0.05)
+library(tidyr)
+library(dplyr)
+```
+# Gapminder website
+```{r}
+library(ggplot2)
+qplot(x = 2003, data = indicator_IT_TEL_TOTL_P2_xls)
+sum(indicator_IT_TEL_TOTL_P2_xls$`1975.0`)
+
+Aus <- subset(indicator_IT_TEL_TOTL_P2_xls, X__1 == 'Australia')
+Chn <- subset(indicator_IT_TEL_TOTL_P2_xls, X__1 == 'China')
+```
+# Facebook Friends' birthdays
+```{r}
+getwd()
+list.files()
+fb <- read.csv('Udacity/EDA/birthdaysExample.csv', sep ='\t')
+names(fb)
+
+fb$dates <- as.Date(fb$dates, format = "%m/%d/%y")
+fb$dates
+
+month <- strftime(fb$dates, format = "%m")
+month
+day <- strftime(fb$dates, format = "%d")
+day
+
+qplot(month, xlab = 'Months of the month', ylab = 'Count', main = 'Month Frequency')
+ggsave('MonthFrequency.png')
+
+qplot(day, xlab = 'Days of the month', ylab = 'Count', main = 'Day Frequency')
+ggsave('DayFrequency.png')
+```

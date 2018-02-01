@@ -1,0 +1,166 @@
+---
+title: "Lesson3_Explore One Variable"
+output: html_document
+---
+===================================================
+
+## Reading in data
+```{r}
+getwd()
+list.files()
+pf <- read.csv('pseudo_facebook.tsv', sep ='\t')
+names(pf)
+```
+
+## Histogram of Users' Birthdays
+
+```{r}
+library(ggthemes)
+ggplot(aes(x = dob_day), data = pf) +
+  geom_histogram(binwidth = 1) +
+  scale_x_continuous(breaks = 1:31)
+
+
+library(ggplot2)
+qplot(x = dob_day, data = pf) +
+  scale_x_continuous(breaks = 1:31) +
+  facet_wrap(~dob_month, ncol = 3)
+```
+
+## Friend Count
+
+```{r}
+library(ggplot2)
+qplot(x = friend_count, data = pf, xlim = c(0, 1000))
+
+qplot(x = friend_count, data = na.omit(pf), binwidth = 25) + 
+  scale_x_continuous(limits = c(0, 1000), breaks = seq(0, 1000, 50))
+
+qplot(x = friend_count, data = subset(pf, !is.na(gender)), binwidth = 10) + 
+  scale_x_continuous(limits = c(0, 1000), breaks = seq(0, 1000, 50)) +
+  facet_wrap(~gender)
+
+```
+## Statistics 'by' Gender
+```{r}
+table(pf$gender)
+by(pf$friend_count, pf$gender,summary)
+```
+
+## Tensure
+```{r}
+qplot(x = tenure/365, data = pf, 
+      xlab = 'Number of years using Facebook',
+      ylab = 'Number of users in sampe',
+      color = I('black'), fill = I('#099DD9')) + 
+  scale_x_continuous(breaks = seq(1,7,1), lim = c(0,7))
+```
+
+## User Ages
+```{r}
+qplot(x = age, data = pf, 
+      xlab = 'Number of years of user age',
+      ylab = 'Number of users in sampe',
+      color = I('black'), fill = I('#099DD9')) + 
+  scale_x_continuous(breaks = seq(10,100,1), lim = c(10,70))
+
+ggplot(aes(x = age), data = pf) +
+  geom_histogram(binwidth = 1, fill = '#5760AB') +
+  scale_x_continuous(breaks = seq(0, 113, 5))
+```
+
+## Transforming Data
+
+```{r}
+qplot(x = friend_count, data = pf)
+summary(pf$friend_count)
+
+summary(log10(pf$friend_count) + 1)
+
+summary(sqrt(pf$friend_count))
+
+library(gridExtra)
+
+p1 = qplot(x = friend_count, data = pf)
+p2 = qplot(x = log10(friend_count + 1), data = pf)
+p3 = qplot(x = sqrt(friend_count), data = pf)
+
+p1 <- ggplot(aes(x = friend_count), data = pf) + geom_histogram()
+p2 <- p1 + scale_x_log10()
+p3 <- p1 + scale_x_sqrt()
+
+# arrange plots in grid
+grid.arrange(p1, p2, p3, ncol = 1)
+```
+## Add a Scaling Layer
+(Prefer to use countScale)
+```{r}
+library(ggplot2)
+
+logScale <- qplot(x = log10(friend_count), data = pf)
+
+countScale <- ggplot(aes(x = friend_count), data = pf) +
+  geom_histogram() + 
+  scale_x_log10()
+
+grid.arrange(logScale, countScale, ncol = 2)
+```
+
+## Frequency Polygons (before we had histograms)
+```{r}
+qplot(x = friend_count, data = subset(pf, !is.na(gender)),
+      binwidth = 10) +
+  scale_x_continuous(lim = c(0, 1000), breaks = seq(0, 1000, 50))
+
+qplot(x = friend_count, data = subset(pf, !is.na(gender)),
+      binwidth = 10, geom = 'freqpoly', color = gender) +
+  scale_x_continuous(lim = c(0, 1000), breaks = seq(0, 1000, 50))
+
+qplot(x = friend_count, y = ..count../sum(..count..),
+      data = subset(pf, !is.na(gender)),
+      xlab = 'Friend Count',
+      ylab = 'Proportion of Users with that friend count',
+      binwidth = 10, geom = 'freqpoly', color = gender) +
+  scale_x_continuous(lim = c(0, 1000), breaks = seq(0, 1000, 50))
+
+qplot(x = www_likes, y = ..count../sum(..count..),
+      data = subset(pf, !is.na(gender)),
+      xlab = 'WWW Likes',
+      ylab = 'Proportion of Users with that www likes',
+      binwidth = 10, geom = 'freqpoly', color = gender) +
+  scale_x_continuous(lim = c(0, 1000), breaks = seq(0, 1000, 50)) +
+  scale_x_log10()
+
+by(pf$www_likes, pf$gender, sum)
+```
+## Box Plots
+need to add coord_cartesian()
+```{r}
+qplot(x = gender, y = friend_count,
+      data = subset(pf, !is.na(gender)),
+      geom = 'boxplot', ylim= c(0,1000))
+
+qplot(x = gender, y = friend_count,
+      data = subset(pf, !is.na(gender)),
+      geom = 'boxplot') +
+  scale_y_continuous(limits = c(0, 1000))
+
+qplot(x = gender, y = friend_count,
+      data = subset(pf, !is.na(gender)),
+      geom = 'boxplot') +
+  coord_cartesian(ylim = c(0, 250))
+
+by(pf$friend_count, pf$gender, summary)
+by(pf$friendships_initiated, pf$gender, summary)
+```
+## Getting Logical
+```{r}
+summary(pf$mobile_likes > 0)
+
+mobile_check_in <- NA
+pf$mobile_check_in <- ifelse(pf$mobile_likes > 0, 1, 0)
+pf$mobile_check_in <- factor(pf$mobile_check_in)
+summary(pf$mobile_check_in)
+
+sum(pf$mobile_check_in == 1) / length((pf$mobile_check_in))
+```
