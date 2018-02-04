@@ -19,19 +19,14 @@ names(pf)
 qplot(x = age, y = friend_count, data = pf)
 qplot(age, friend_count, data = pf)
 
-```
+ggplot(aes(x = age, y = friend_count), data = pf) +
+  geom_jitter(alpha = 1/20) +
+  xlim(13, 90)
 
-***
-
-#### What are some things that you notice right away?
-Response:
-
-***
-
-### ggplot Syntax
-Notes:
-
-```{r ggplot Syntax}
+ggplot(aes(x = age, y = friend_count), data = pf) +
+  geom_point(alpha = 1/20, position = position_jitter(h = 0)) +
+  xlim(13, 90) +
+  coord_trans(y = 'sqrt')
 
 ```
 
@@ -67,9 +62,14 @@ Notes:
 ***
 
 ### Alpha and Jitter
-Notes:
+Notes: Explore the relationship between friends initiated vs age.
 
-```{r Alpha and Jitter}
+```{r}
+# Build up in layers
+ggplot(aes(x = age, y = friendships_initiated), data =  pf) + 
+  geom_point(alpha = 1/10, position = position_jitter(h = 0)) +
+  coord_trans(y = 'sqrt') +
+  xlim(13, 90)
 
 ```
 
@@ -84,13 +84,32 @@ Notes:
 Notes:
 
 ```{r Conditional Means}
+install.packages('dplyr')
+library(dplyr)
+age_groups <- group_by(pf, age)
+pf.fc_by_age <- summarise(age_groups,
+                          friend_count_mean = mean(friend_count),
+                          friend_count_median = median(friend_count),
+                          n = n())
+pf.fc_by_age <- arrange(pf.fc_by_age, age)
+head(pf.fc_by_age)
 
+
+pf.fc_by_age <- pf %>% 
+  group_by(age) %>%
+  summarise(friend_count_mean = mean(friend_count),
+                          friend_count_median = median(friend_count),
+                          n = n()) %>%
+  arrange(age)
+
+head(pf.fc_by_age, 20)
 ```
 
 Create your plot!
 
 ```{r Conditional Means Plot}
-
+ggplot(aes(x = age, y = mean(friend_count)), data = pf.fc_by_age) +
+  geom_line()
 ```
 
 ***
@@ -99,7 +118,29 @@ Create your plot!
 Notes:
 
 ```{r Overlaying Summaries with Raw Data}
+ggplot(aes(x = age, y = friendships_initiated), data =  pf) + 
+  xlim(13, 90) +
+  geom_point(alpha = 0.05, 
+             position = position_jitter(h = 0),
+              color = 'orange') +
+  coord_trans(y = 'sqrt') +
+  geom_line(stat = 'summary', fun.y = mean, color = 'blue') +
+  geom_line(stat = 'summary', fun.y = quantile, fun.args = list(probs = .1),
+            linetype = 2, color = 'red' ) +
+    geom_line(stat = 'summary', fun.y = quantile, fun.args = list(probs = .9),
+            linetype = 2, color = 'red' )
 
+
+ggplot(aes(x = age, y = friendships_initiated), data =  pf) + 
+  coord_cartesian(xlim =  c(13, 90), ylim = c(0, 1000)) +
+  geom_point(alpha = 0.05, 
+             position = position_jitter(h = 0),
+              color = 'orange') +
+  geom_line(stat = 'summary', fun.y = mean, color = 'blue') +
+  geom_line(stat = 'summary', fun.y = quantile, fun.args = list(probs = .1),
+            linetype = 2, color = 'red' ) +
+    geom_line(stat = 'summary', fun.y = quantile, fun.args = list(probs = .9),
+            linetype = 2, color = 'red' )
 ```
 
 #### What are some of your observations of the plot?
@@ -118,7 +159,10 @@ Notes:
 Notes:
 
 ```{r Correlation}
+cor(pf$age, pf$friend_count)
 
+cor.test(pf$age, pf$friend_count, method = 'pearson')
+with(pf, cor.test(age, friend_count, method = 'pearson'))
 ```
 
 Look up the documentation for the cor.test function.
@@ -132,7 +176,7 @@ Response:
 Notes:
 
 ```{r Correlation on Subsets}
-with(                 , cor.test(age, friend_count))
+with( subset(pf, age <= 70), cor.test(age, friend_count))
 ```
 
 ***
@@ -146,7 +190,12 @@ Notes:
 Notes:
 
 ```{r}
-
+ggplot(aes(x = www_likes_received, y = likes_received), data = pf) +
+  xlim(0, 65000) +
+  ylim(0, 20000) +
+  geom_point(alpha = 1/10,
+             position = position_jitter(h = 0)) +
+  coord_trans(y = 'sqrt')
 ```
 
 ***
@@ -155,13 +204,17 @@ Notes:
 Notes:
 
 ```{r Strong Correlations}
-
+ggplot(aes(x = www_likes_received, y = likes_received), data = pf) +
+  geom_point() +
+  xlim(0, quantile(pf$www_likes_received, 0.95)) +
+  ylim(0, quantile(pf$likes_received, 0.95)) +
+  geom_smooth(method = 'lm', color = 'red')
 ```
 
 What's the correlation betwen the two variables? Include the top 5% of values for the variable in the calculation and round to 3 decimal places.
 
 ```{r Correlation Calcuation}
-
+with(pf, cor.test(www_likes_received, likes_received), method = 'pearson')
 ```
 
 Response:
