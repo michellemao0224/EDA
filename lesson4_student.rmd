@@ -232,12 +232,17 @@ Notes:
 ```{r More Caution With Correlation}
 install.packages('alr3')
 library(alr3)
+data(Mitchell)
+?Mitchell
 ```
 
 Create your plot!
 
 ```{r Temp vs Month}
+ggplot(aes(x = Month, y = Temp), data = Mitchell) +
+  geom_point()
 
+qplot(data = Mitchell, Month, Temp)
 ```
 
 ***
@@ -249,6 +254,13 @@ b. What is the actual correlation of the two variables?
 (Round to the thousandths place)
 
 ```{r Noisy Scatterplots}
+install.packages("alr3")
+install.packages("car")
+install.packages("quantreg")
+library(alr3)
+
+data(Mitchell)
+cor.test(Mitchell$Month, Mitchell$Temp)
 
 ```
 
@@ -277,6 +289,11 @@ Notes:
 Notes:
 
 ```{r Understanding Noise: Age to Age Months}
+ggplot(aes(x = age, y = friend_count_mean), data = pf.pc_by_age) +
+  geom_line()
+
+head(pf.fc_by_age, 10)
+pf.fc_by_age[17:19, ]
 
 ```
 
@@ -285,11 +302,19 @@ Notes:
 ### Age with Months Means
 
 ```{r Age with Months Means}
+pf$age_with_months <- pf$age + (1 - pf$dob_month / 12)
 
 ```
 
 Programming Assignment
 ```{r Programming Assignment}
+age_with_months <- group_by(pf, age_with_months)
+pf.fc_by_age_months <- summarise(age_with_months,
+                          friend_count_mean = mean(friend_count),
+                          friend_count_median = median(friend_count),
+                          n = n())
+pf.fc_by_age_months <- arrange(pf.fc_by_age_months, age_with_months)
+head(pf.fc_by_age_months)
 
 ```
 
@@ -298,6 +323,8 @@ Programming Assignment
 ### Noise in Conditional Means
 
 ```{r Noise in Conditional Means}
+ggplot(aes(x = age_with_months, y = friend_count_mean), data = subset(pf.fc_by_age_months, age_with_months <= 71)) + 
+  geom_line()
 
 ```
 
@@ -307,6 +334,20 @@ Programming Assignment
 Notes:
 
 ```{r Smoothing Conditional Means}
+p1 <- ggplot(aes(x = age, y = friend_count_mean), data = subset(pf.fc_by_age, age < 71)) + 
+  geom_line() +
+  geom_smooth()
+
+p2 <- ggplot(aes(x = age_with_months, y = friend_count_mean), data = subset(pf.fc_by_age_months, age_with_months < 71)) + 
+  geom_line() +
+  geom_smooth()
+
+p3 <- ggplot(aes(x = round(age / 5) * 5, y = friend_count), 
+             data = subset(pf, age < 71)) +
+  geom_line(stat = 'summary', fun.y = mean)
+
+library(gridExtra)
+grid.arrange(p2, p1, ncol = 1)
 
 ```
 
