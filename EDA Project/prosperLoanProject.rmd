@@ -36,7 +36,52 @@ library(RCurl)
 ```{r echo=FALSE, Load_the_Data}
 # Load the Data
 loan <- read.csv('prosperLoanData.csv')
+```
+*** 
+The dataset is comprised of 81 variables and contains 113937 entries. The variable that are explored in the dataset are the following Term : Amount of month customers opted for loan
+
+LoanStatus : Current status of the loan like chargedoff, completed, defauted etc…
+
+EstimatedEffectiveYield : Yield of lenders from borrowers minus the processing fee and late fines
+
+ProsperScore : Risk Factor score from 1 to 10. 10 being least risky
+
+BorrowerAPR : The Borrower’s Annual Percentage Rate (APR) for the loan.
+
+BorrowerRate : The Borrower’s interest rate for this loan.
+
+ListingCategory..numeric. : Prosper rating for borrowers in numbers
+
+EmploymentStatus : Current type of employment
+
+Occupation : Occupation of borrower at the time of listing
+
+EmploymentStatusDuration : How long the employee has been employed
+
+IsBorrowerHomeowner : Does the borrower owns house at the time of listing (True & False)
+
+ProsperRating..Alpha. : Prosper rating for borrowers in alphabets
+
+IncomeVerifiable : If the income of the borrower is verifiable at the time of listing (True & False)
+
+StatedMonthlyIncome : Monthly income of the borrower
+
+MonthlyLoanPayment : Monthly loan payment amount
+
+Recommendations : Recommendations the borrowers has at the time of listing
+
+DebtToIncomeRatio : The debt to income ratio of the borrower at the time the credit profile was pulled.
+
+LoanOriginalAmount : Original amount of the loan
+
+LoanOriginationQuarter : Quarter of the month when loan was originated
+
+A basic exploration of the datset would give the following information
+
+***
+```{r echo=FALSE, message=FALSE, warning=FALSE}
 names(loan)
+summary(loan)
 ```
 
 > The prosper loan data can allow me to explore the difference in borrower APR, borrower rate and lender yield. This shows the difference about what the actual interest rate the borrower haven.
