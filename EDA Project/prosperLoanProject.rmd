@@ -39,9 +39,9 @@ loan <- read.csv('prosperLoanData.csv')
 names(loan)
 ```
 
-> **Tip**: Before you create any plots, it is a good idea to provide a short
-introduction into the dataset that you are planning to explore. Replace this
-quoted text with that general information!
+> The prosper loan data can allow me to explore the difference in borrower APR, borrower rate and lender yield. This shows the difference about what the actual interest rate the borrower haven.
+In addition, by examining the relationship between borrower income and loan payment, we can see how likely the borrower can repay a debt.
+
 
 # Univariate Plots Section
 
