@@ -84,9 +84,11 @@ names(loan)
 summary(loan)
 ```
 
-> The prosper loan data can allow me to explore the difference in borrower APR, borrower rate and lender yield. This shows the difference about what the actual interest rate the borrower haven.
-In addition, by examining the relationship between borrower income and loan payment, we can see how likely the borrower can repay a debt.
-
+> The prosper loan data can allow me to explore:
+1) The difference in borrower APR, borrower rate and lender yield. 
+This shows the difference about what the actual interest rate the borrower haven.
+2) By examining the relationship between borrower income and loan payment, we can see how likely the borrower can repay a debt.
+3) Other information: general borrower credit status, credit risk analysis.
 
 # Univariate Plots Section
 
@@ -98,8 +100,20 @@ There should be multiple code chunks and text sections; the first one below is
 just to help you get started.
 
 ```{r echo=FALSE, Univariate_Plots}
+# check which term people perfer to have loan
+qplot(x = Term,
+      data = loan,
+      xlab = 'Term (years)',
+      ylab = 'Loan Count',
+      binwidth = 12) +
+  scale_x_continuous(lim = c(0, 72), breaks = seq(0, 72, 12))
+
+summary(loan$Term)
 
 ```
+# From the histogram, over 75000 people choose the loan term in 36 years, much higher than 60 years. However, we can see not many people choose the year of term in 12 years.
+
+
 
 > **Tip**: Make sure that you leave a blank line between the start / end of
 each code block and the end / start of your Markdown text so that it is
