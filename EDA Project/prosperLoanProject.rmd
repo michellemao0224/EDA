@@ -99,13 +99,15 @@ forget to add a comment after each plot or closely-related group of plots!
 There should be multiple code chunks and text sections; the first one below is
 just to help you get started.
 
+> Basic Loan Information
+
 ```{r echo=FALSE, Univariate_Plots}
-# check which term people perfer to have loan
-qplot(x = Term,
-      data = loan,
+# check which term borrower perfer to have the loan
+qplot(x = Term, data = loan,
       xlab = 'Term (years)',
       ylab = 'Loan Count',
-      binwidth = 12) +
+      main = 'How long borrower lend the loan',
+      binwidth = 12, fill= I('#FF6EB4')) +
   scale_x_continuous(lim = c(0, 72), breaks = seq(0, 72, 12))
 
 summary(loan$Term)
@@ -113,8 +115,45 @@ summary(loan$Term)
 ```
 # From the histogram, over 75000 people choose the loan term in 36 years, much higher than 60 years. However, we can see not many people choose the year of term in 12 years.
 
+```{r echo=FALSE, Univariate_Plots}
+qplot(x = LoanOriginalAmount, data = loan,
+      binwidth = 1000, 
+      xlab = 'Loan Original Amount',
+      ylab = 'Count',
+      main = 'How much loan borrower lend',
+      colour = I('#FCFCFC'), fill= I('#FF6EB4')) +
+  scale_x_continuous(breaks = seq(0, 35000, 5000))
+```
 
+> Basic Borrower Information
 
+```{r echo=FALSE, Univariate_Plots}
+qplot(x = ProsperRating..Alpha., data = subset(loan, !is.na(ProsperScore)),
+      xlab = 'Prosper Rating',
+      ylab = 'Count',
+      main = 'Prosper Rating of Borrower') +
+  geom_histogram(stat='count', fill= I('#FF82AB'), color='white')
+```
+
+```{r echo=FALSE, Univariate_Plots}
+qplot(x = ProsperRating..Alpha., data = subset(loan, !is.na(ProsperScore)),
+      xlab = 'Prosper Rating',
+      ylab = 'Count',
+      main = 'Prosper Rating of Borrower') +
+  geom_histogram(stat='count', fill= I('#FF82AB'), color='white')
+```
+
+```{r echo=FALSE, Univariate_Plots}
+
+```
+
+```{r echo=FALSE, Univariate_Plots}
+
+```
+
+```{r echo=FALSE, Univariate_Plots}
+
+```
 > **Tip**: Make sure that you leave a blank line between the start / end of
 each code block and the end / start of your Markdown text so that it is
 formatted nicely in the knitted text. Note as well that text on consecutive
