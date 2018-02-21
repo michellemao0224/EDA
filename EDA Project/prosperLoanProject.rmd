@@ -144,7 +144,14 @@ qplot(x = ProsperRating..Alpha., data = subset(loan, !is.na(ProsperScore)),
 ```
 
 ```{r echo=FALSE, Univariate_Plots}
-
+ggplot(aes(x = reorder(Occupation, Occupation, function(x) - length(x)),
+           fill = I("#FF82AB")), data = loan) +
+  geom_bar() +
+  xlab('Occupation of Borrower')  +
+  ggtitle('What is borrower occupation') +
+  coord_flip() +
+  theme_bw() +
+  theme(axis.text = element_text(size = 8))
 ```
 
 ```{r echo=FALSE, Univariate_Plots}
