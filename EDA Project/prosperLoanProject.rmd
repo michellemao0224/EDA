@@ -149,13 +149,14 @@ ggplot(aes(x = reorder(Occupation, Occupation,
 
 ```{r echo=FALSE, Univariate_Plots}
 
-ggplot(loan, aes(x=reorder(IncomeRange,IncomeRange,
+ggplot(aes(x=reorder(IncomeRange,IncomeRange,
                      function(x)-length(x)),
-           fill = I("#FF82AB"))) + 
+           fill = I("#FF82AB")), data = loan) + 
   geom_bar() +
   xlab('Income Range')  +
   ylab('Count') +
-  ggtitle('Income Range of Borrower') 
+  ggtitle('Income Range of Borrower') +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
 ```{r echo=FALSE, Univariate_Plots}
@@ -177,6 +178,38 @@ bs <- ggplot(data = statesmap) +
 
 bs <- bs + geom_point(aes(x = state.x, y =  state.y), color = "red", size = 3)
 ```
+
+```{r echo=FALSE, Univariate_Plots}
+loan$AnnualIncome <- loan$StatedMonthlyIncome * 12
+ggplot(aes(x = AnnualIncome), data = loan) +
+  geom_histogram(fill= I('#FF82AB'), color='white') +
+  scale_x_log10() +
+  scale_x_continuous(lim = c(0, 150000), breaks = seq(0, 150000, 5000)) +
+  xlab('Annual Income')  +
+  ylab('Count') +
+  ggtitle('Annual Income of Borrower') +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+```{r echo=FALSE, Univariate_Plots}
+
+```
+
+```{r echo=FALSE, Univariate_Plots}
+
+```
+
+```{r echo=FALSE, Univariate_Plots}
+
+```
+
+```{r echo=FALSE, Univariate_Plots}
+
+```
+
+```{r echo=FALSE, Univariate_Plots}
+
+```
+
 > **Tip**: Make sure that you leave a blank line between the start / end of
 each code block and the end / start of your Markdown text so that it is
 formatted nicely in the knitted text. Note as well that text on consecutive
