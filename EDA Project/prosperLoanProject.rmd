@@ -203,6 +203,23 @@ ggplot(aes(x = CurrentDelinquencies), data = loan) +
 ```
 
 ```{r echo=FALSE, Univariate_Plots}
+c1 <- ggplot(aes(x = DelinquenciesLast7Years), data = loan) +
+  geom_histogram(fill= I('#E066FF'), color='white') +
+  scale_x_continuous(lim = c(0, 40), breaks = seq(0, 40, 1)) +
+  ylim(0, 7000) +
+  xlab('Delinquency Last 7 Years')  +
+  ylab('Count') +
+  ggtitle('How many times of delinquency last 7 years')
+
+c2 <- ggplot(aes(x = PublicRecordsLast10Years), data = loan) +
+  geom_histogram(fill= I('#E066FF'), color='white') +
+  scale_x_continuous(lim = c(0, 5), breaks = seq(0, 5, 1)) +
+  ylim(0, 25000) +
+  xlab('Public Delinquency Records Last 10 Years')  +
+  ylab('Count') +
+  ggtitle('How many times of public delinquency records last 10 years')
+
+grid.arrange(c1, c2, nrow = 2)
 
 ```
 
