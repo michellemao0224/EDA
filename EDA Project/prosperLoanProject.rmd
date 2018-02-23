@@ -116,6 +116,7 @@ summary(loan$Term)
 # From the histogram, over 75000 people choose the loan term in 36 years, much higher than 60 years. However, we can see not many people choose the year of term in 12 years.
 
 ```{r echo=FALSE, Univariate_Plots}
+
 qplot(x = LoanOriginalAmount, data = loan,
       binwidth = 1000, 
       xlab = 'Loan Original Amount',
@@ -123,19 +124,23 @@ qplot(x = LoanOriginalAmount, data = loan,
       main = 'How much loan borrower lend',
       colour = I('#FCFCFC'), fill= I('#FF6EB4')) +
   scale_x_continuous(breaks = seq(0, 35000, 5000))
+
 ```
 
 > Basic Borrower Information
 
 ```{r echo=FALSE, Univariate_Plots}
+
 qplot(x = ProsperRating..Alpha., data = subset(loan, !is.na(ProsperScore)),
       xlab = 'Prosper Rating',
       ylab = 'Count',
       main = 'Prosper Rating of Borrower') +
   geom_histogram(stat='count', fill= I('#FF82AB'), color='white')
+
 ```
 
 ```{r echo=FALSE, Univariate_Plots}
+
 ggplot(aes(x = reorder(Occupation, Occupation, 
                        function(x) - length(x)),
            fill = I("#FF82AB")), data = subset(loan,!is.na(Occupation))) +
@@ -145,6 +150,7 @@ ggplot(aes(x = reorder(Occupation, Occupation,
   coord_flip() +
   theme_bw() +
   theme(axis.text = element_text(size = 8))
+
 ```
 
 ```{r echo=FALSE, Univariate_Plots}
@@ -157,6 +163,7 @@ ggplot(aes(x=reorder(IncomeRange,IncomeRange,
   ylab('Count') +
   ggtitle('Income Range of Borrower') +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
 ```
 
 ```{r echo=FALSE, Univariate_Plots}
@@ -180,6 +187,7 @@ bs <- bs + geom_point(aes(x = state.x, y =  state.y), color = "red", size = 3)
 ```
 
 ```{r echo=FALSE, Univariate_Plots}
+
 loan$AnnualIncome <- loan$StatedMonthlyIncome * 12
 ggplot(aes(x = AnnualIncome), data = loan) +
   geom_histogram(fill= I('#FF82AB'), color='white') +
@@ -189,10 +197,12 @@ ggplot(aes(x = AnnualIncome), data = loan) +
   ylab('Count') +
   ggtitle('Annual Income of Borrower') +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
 ```
 > Credit History
 
 ```{r echo=FALSE, Univariate_Plots}
+
 ggplot(aes(x = CurrentDelinquencies), data = loan) +
   geom_histogram(fill= I('#E066FF'), color='white') +
   scale_x_continuous(lim = c(0, 16), breaks = seq(0, 16, 1)) +
@@ -200,9 +210,11 @@ ggplot(aes(x = CurrentDelinquencies), data = loan) +
   xlab('Current Delinquency Times')  +
   ylab('Count') +
   ggtitle('How many times of current delinquency')
+
 ```
 
 ```{r echo=FALSE, Univariate_Plots}
+
 c1 <- ggplot(aes(x = DelinquenciesLast7Years), data = loan) +
   geom_histogram(fill= I('#E066FF'), color='white') +
   scale_x_continuous(lim = c(0, 40), breaks = seq(0, 40, 1)) +
@@ -225,9 +237,26 @@ grid.arrange(c1, c2, nrow = 2)
 
 ```{r echo=FALSE, Univariate_Plots}
 
+ggplot(aes(x = BankcardUtilization), data = subset(loan, !is.na(BankcardUtilization))) +
+  geom_histogram(fill= I('#E066FF'), color='white') +
+  scale_x_continuous(lim = c(0, 1.4), breaks = seq(0, 1.4, 0.2)) +
+  ylim(0, 8000) +
+  xlab('Bank Card Utilization')  +
+  ylab('Count') +
+  ggtitle('How many times the borrower use the bank card')
+
 ```
 
 ```{r echo=FALSE, Univariate_Plots}
+
+ggplot(aes(x = TradesNeverDelinquent..percentage.), 
+       data = subset(loan, !is.na(TradesNeverDelinquent..percentage.))) +
+  geom_histogram(fill= I('#E066FF'), color='white') +
+  scale_x_continuous(lim = c(0.3, 1.0), breaks = seq(0.3, 1.0, 0.05)) +
+  ylim(0, 10000) +
+  xlab('Trade Never Delinquent (percentage)')  +
+  ylab('Count') +
+  ggtitle('How many trades never delinquent')
 
 ```
 
