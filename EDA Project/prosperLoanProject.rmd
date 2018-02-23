@@ -190,8 +190,16 @@ ggplot(aes(x = AnnualIncome), data = loan) +
   ggtitle('Annual Income of Borrower') +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
-```{r echo=FALSE, Univariate_Plots}
+> Credit History
 
+```{r echo=FALSE, Univariate_Plots}
+ggplot(aes(x = CurrentDelinquencies), data = loan) +
+  geom_histogram(fill= I('#E066FF'), color='white') +
+  scale_x_continuous(lim = c(0, 16), breaks = seq(0, 16, 1)) +
+  ylim(0, 12000) +
+  xlab('Current Delinquency Times')  +
+  ylab('Count') +
+  ggtitle('How many times of current delinquency')
 ```
 
 ```{r echo=FALSE, Univariate_Plots}
