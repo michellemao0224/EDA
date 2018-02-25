@@ -305,6 +305,70 @@ supporting variables. Try to look at relationships between supporting variables
 as well.
 
 ```{r echo=FALSE, Bivariate_Plots}
+p1 <- ggplot(aes(x = ProsperRating..Alpha., y = BorrowerAPR), 
+       data = loan) +
+    geom_point()
+
+p2 <- ggplot(aes(x = ProsperRating..Alpha., y = BorrowerRate), 
+       data = loan) +
+  geom_point()
+
+p3 <- ggplot(aes(x = ProsperRating..Alpha., y = LenderYield), 
+       data = loan) +
+    geom_point()
+
+grid.arrange(p1, p2, p3, nrow = 3)
+```
+
+```{r echo=FALSE, Bivariate_Plots}
+b1 <- ggplot(aes(x = BorrowerAPR, y = CurrentDelinquencies), 
+       data = subset(loan, !is.na(CurrentDelinquencies))) +
+  geom_point()
+
+b2 <- ggplot(aes(x = BorrowerRate, y = CurrentDelinquencies), 
+       data = subset(loan, !is.na(CurrentDelinquencies))) +
+  geom_point()
+
+b3 <- ggplot(aes(x = LenderYield, y = CurrentDelinquencies), 
+       data = subset(loan, !is.na(CurrentDelinquencies))) +
+  geom_point()
+
+grid.arrange(b1, b2, b3, nrow = 3)
+``` 
+
+```{r echo=FALSE, Bivariate_Plots}
+ggplot(aes(x = DebtToIncomeRatio, y = CurrentDelinquencies), 
+       data = subset(loan, !is.na(CurrentDelinquencies))) +
+  geom_point()
+
+```
+
+
+```{r echo=FALSE, Bivariate_Plots}
+
+```
+
+```{r echo=FALSE, Bivariate_Plots}
+
+```
+
+```{r echo=FALSE, Bivariate_Plots}
+
+```
+
+```{r echo=FALSE, Bivariate_Plots}
+
+```
+
+```{r echo=FALSE, Bivariate_Plots}
+
+```
+
+```{r echo=FALSE, Bivariate_Plots}
+
+```
+
+```{r echo=FALSE, Bivariate_Plots}
 
 ```
 
