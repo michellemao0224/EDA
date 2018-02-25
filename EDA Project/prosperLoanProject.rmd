@@ -261,7 +261,13 @@ ggplot(aes(x = TradesNeverDelinquent..percentage.),
 ```
 
 ```{r echo=FALSE, Univariate_Plots}
-
+ggplot(aes(x = DebtToIncomeRatio), data = subset(loan, !is.na( DebtToIncomeRatio))) +
+  geom_histogram(fill= I('#E066FF'), color='white') +
+  scale_x_continuous(lim = c(0, 1.0), breaks = seq(0, 1.0, 0.05)) +
+  ylim(0, 15000) +
+  xlab('Ratio of Debt and Income')  +
+  ylab('Count') +
+  ggtitle('What is the ratio of debt and income')
 ```
 
 > **Tip**: Make sure that you leave a blank line between the start / end of
