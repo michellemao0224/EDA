@@ -130,6 +130,14 @@ qplot(x = LoanOriginalAmount, data = loan,
 > Basic Borrower Information
 
 ```{r echo=FALSE, Univariate_Plots}
+qplot(x = IsBorrowerHomeowner, data = subset(loan, !is.na(ProsperScore)),
+      xlab = 'Home Owner',
+      ylab = 'Count',
+      main = 'Number of Home Owner Borrower') +
+  geom_histogram(stat='count', fill= I('#FF82AB'), color='white')
+```
+
+```{r echo=FALSE, Univariate_Plots}
 
 qplot(x = ProsperRating..Alpha., data = subset(loan, !is.na(ProsperScore)),
       xlab = 'Prosper Rating',
@@ -307,15 +315,15 @@ as well.
 ```{r echo=FALSE, Bivariate_Plots}
 p1 <- ggplot(aes(x = ProsperRating..Alpha., y = BorrowerAPR), 
        data = loan) +
-    geom_point()
+  geom_boxplot(aes(fill = ProsperRating..Alpha.))
 
 p2 <- ggplot(aes(x = ProsperRating..Alpha., y = BorrowerRate), 
        data = loan) +
-  geom_point()
+  geom_boxplot(aes(fill = ProsperRating..Alpha.))
 
 p3 <- ggplot(aes(x = ProsperRating..Alpha., y = LenderYield), 
        data = loan) +
-    geom_point()
+  geom_boxplot(aes(fill = ProsperRating..Alpha.))
 
 grid.arrange(p1, p2, p3, nrow = 3)
 ```
@@ -345,11 +353,15 @@ ggplot(aes(x = DebtToIncomeRatio, y = CurrentDelinquencies),
 
 
 ```{r echo=FALSE, Bivariate_Plots}
-
+ggplot(aes(x = LoanOriginationQuarter, y = LoanOriginalAmount), 
+       data = subset(loan, !is.na(LoanOriginalAmount))) +
+  geom_boxplot()
 ```
 
 ```{r echo=FALSE, Bivariate_Plots}
-
+ggplot(aes(x = IncomeRange, y = DebtToIncomeRatio), 
+       data = subset(loan, !is.na(DebtToIncomeRatio))) +
+  geom_boxplot()
 ```
 
 ```{r echo=FALSE, Bivariate_Plots}
