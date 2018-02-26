@@ -373,8 +373,8 @@ grid.arrange(b1, b2, b3, nrow = 3)
 ```{r echo=FALSE, Bivariate_Plots}
 ggplot(aes(x = DebtToIncomeRatio, y = CurrentDelinquencies), 
        data = subset(loan, !is.na(CurrentDelinquencies))) +
-  geom_point(color = I('#D02090'), size = 0.8) +
-  geom_smooth(method = 'lm', color = 'yellow', size = 0.5) +
+  geom_point(color = I('#FF6EB4'), size = 0.8) +
+  geom_smooth(method = 'lm', color = '#EEE685', size = 0.5) +
   xlab('Current Delinquencies')  +
   ylab('Debt to Income Ratio')
 
@@ -386,6 +386,7 @@ ggplot(aes(x = LoanOriginationQuarter, y = LoanOriginalAmount),
        data = subset(loan, !is.na(EmploymentStatus))) +
   geom_boxplot(aes(colour = EmploymentStatus), 
                outlier.colour = 'pink', outlier.shape = 4, outlier.size = 0.8) +
+  scale_x_discrete(limits = c('Q1 2006','Q2 2006','Q3 2006','Q4 2006','Q1 2007','Q2 2007','Q3 2007','Q4 2007','Q1 2008','Q2 2008','Q3 2008','Q4 2008','Q2 2009','Q3 2009','Q4 2009','Q1 2010','Q2 2010','Q3 2010','Q4 2010','Q1 2011','Q2 2011','Q3 2011','Q4 2011','Q1 2012','Q2 2012','Q3 2012','Q4 2012','Q1 2013','Q2 2013','Q3 2013','Q4 2013','Q1 2014')) +
   xlab('Quarter')  +
   ylab('Loan Original Amount') +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
@@ -394,8 +395,8 @@ ggplot(aes(x = LoanOriginationQuarter, y = LoanOriginalAmount),
 ```{r echo=FALSE, Bivariate_Plots}
 ggplot(aes(x = IncomeRange, y = DebtToIncomeRatio), 
        data = subset(loan, !is.na(DebtToIncomeRatio))) +
-  geom_boxplot(fill='#D02090', color="yellow",
-               outlier.colour = '#D02090', outlier.shape = 4, outlier.size = 0.8) +
+  geom_boxplot(fill='#FF6EB4', color='#EEE685',
+               outlier.colour = '#FF6EB4', outlier.shape = 4, outlier.size = 0.8) +
   scale_x_discrete(limits = c('$1-24,999', '$25,000-49,999', '$50,000-74,999', '$75,000-99,999', '$100,000+')) +
   xlab('Income Range')  +
   ylab('Debt to Income Ratio') 
@@ -403,8 +404,8 @@ ggplot(aes(x = IncomeRange, y = DebtToIncomeRatio),
 
 ```{r echo=FALSE, Bivariate_Plots}
 ggplot(aes(x = StatedMonthlyIncome, y = MonthlyLoanPayment), data = loan) +
-  geom_line(color = '#D02090') +
-  geom_smooth(color = 'yellow') +
+  geom_line(color = '#FF6EB4') +
+  geom_smooth(color = '#EEE685') +
   xlab('Monthly Income')  +
   ylab('Monthly Loan Payment') 
 
@@ -419,6 +420,24 @@ ggplot(aes(x = ProsperRating..Alpha., y = BorrowerState), data = loan) +
 ```
 
 ```{r echo=FALSE, Bivariate_Plots}
+ggplot(aes(x = LoanOriginationQuarter, y = LP_InterestandFees), 
+       data = loan) +
+  geom_boxplot(fill='#FF6EB4', color='#EEE685',
+               outlier.colour = '#FF6EB4', outlier.shape = 4, outlier.size = 0.8) +
+  xlab('Quarter')  +
+  ylab('Interest and Fees') +
+  scale_x_discrete(limits = c('Q1 2006','Q2 2006','Q3 2006','Q4 2006','Q1 2007','Q2 2007','Q3 2007','Q4 2007','Q1 2008','Q2 2008','Q3 2008','Q4 2008','Q1 2009','Q2 2009','Q3 2009','Q4 2009','Q1 2010','Q2 2010','Q3 2010','Q4 2010','Q1 2011','Q2 2011','Q3 2011','Q4 2011','Q1 2012','Q2 2012','Q3 2012','Q4 2012','Q1 2013','Q2 2013','Q3 2013','Q4 2013','Q1 2014')) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
+
+
+ggplot(aes(x = LoanOriginationQuarter, y = LP_InterestandFees), 
+       data = loan) +
+  geom_point(stat = "summary",
+            fun.y = mean) +
+  xlab('Quarter')  +
+  ylab('Interest and Fees') +
+  scale_x_discrete(limits = c('Q1 2006','Q2 2006','Q3 2006','Q4 2006','Q1 2007','Q2 2007','Q3 2007','Q4 2007','Q1 2008','Q2 2008','Q3 2008','Q4 2008','Q2 2009','Q3 2009','Q4 2009','Q1 2010','Q2 2010','Q3 2010','Q4 2010','Q1 2011','Q2 2011','Q3 2011','Q4 2011','Q1 2012','Q2 2012','Q3 2012','Q4 2012','Q1 2013','Q2 2013','Q3 2013','Q4 2013','Q1 2014')) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
 
 ```
 
