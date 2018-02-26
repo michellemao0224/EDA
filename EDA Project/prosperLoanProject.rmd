@@ -191,7 +191,7 @@ bs <- ggplot(data = statesmap) +
   coord_fixed(1.3) +
   guides(fill=FALSE) 
 
-bs <- bs + geom_point(aes(x = state.x, y =  state.y), color = "red", size = 3)
+bs <- bs + geom_point(aes(x = state.x, y =  state.y), color = 'red', size = 3)
 ```
 
 ```{r echo=FALSE, Univariate_Plots}
@@ -331,15 +331,15 @@ grid.arrange(p1, p2, p3, nrow = 3)
 ```{r echo=FALSE, Bivariate_Plots}
 b1 <- ggplot(aes(x = BorrowerAPR, y = CurrentDelinquencies), 
        data = subset(loan, !is.na(CurrentDelinquencies))) +
-  geom_point()
+  geom_point(alpha = 1/10, position = position_jitter(h = 0), color = I('#D02090'), size = 0.8)
 
 b2 <- ggplot(aes(x = BorrowerRate, y = CurrentDelinquencies), 
        data = subset(loan, !is.na(CurrentDelinquencies))) +
-  geom_point()
+  geom_point(alpha = 1/10, position = position_jitter(h = 0), color = I('#D02090'), size = 0.8)
 
 b3 <- ggplot(aes(x = LenderYield, y = CurrentDelinquencies), 
        data = subset(loan, !is.na(CurrentDelinquencies))) +
-  geom_point()
+  geom_point(alpha = 1/10, position = position_jitter(h = 0), color = I('#D02090'), size = 0.8)
 
 grid.arrange(b1, b2, b3, nrow = 3)
 ``` 
@@ -347,15 +347,18 @@ grid.arrange(b1, b2, b3, nrow = 3)
 ```{r echo=FALSE, Bivariate_Plots}
 ggplot(aes(x = DebtToIncomeRatio, y = CurrentDelinquencies), 
        data = subset(loan, !is.na(CurrentDelinquencies))) +
-  geom_point()
+  geom_point(color = I('#D02090'), size = 0.8) +
+  geom_smooth(method = 'lm', color = 'yellow', size = 0.5)
 
 ```
 
 
 ```{r echo=FALSE, Bivariate_Plots}
 ggplot(aes(x = LoanOriginationQuarter, y = LoanOriginalAmount), 
-       data = subset(loan, !is.na(LoanOriginalAmount))) +
-  geom_boxplot()
+       data = subset(loan, !is.na(EmploymentStatus))) +
+  geom_boxplot(aes(colour = EmploymentStatus), 
+               outlier.colour = 'Pink', outlier.shape = 4, outlier.size = 0.8) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
 ```{r echo=FALSE, Bivariate_Plots}
