@@ -208,6 +208,16 @@ ggplot(aes(x = AnnualIncome), data = loan) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 ```
+
+```{r echo=FALSE, Univariate_Plots}
+ggplot(aes(x = BorrowerState), data = loan) +
+  geom_histogram(aes(color = EmploymentStatus), stat="count", fill = 'white') +
+  xlab('Borrower State')  +
+  ylab('Count') +
+  ggtitle('Number of Borrower in Each State') +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
 > Credit History
 
 ```{r echo=FALSE, Univariate_Plots}
@@ -317,16 +327,22 @@ as well.
 p1 <- ggplot(aes(x = ProsperRating..Alpha., y = BorrowerAPR), 
        data = loan) +
   geom_boxplot(aes(fill = ProsperRating..Alpha.)) +
+  xlab('Prosper Rating')  +
+  ylab('Borrower APR') +
   scale_x_discrete(limits = c('AA', 'A', 'B', 'C', 'D', 'E', 'HR'))
 
 p2 <- ggplot(aes(x = ProsperRating..Alpha., y = BorrowerRate), 
        data = loan) +
   geom_boxplot(aes(fill = ProsperRating..Alpha.)) +
+  xlab('Prosper Rating')  +
+  ylab('Borrower Rate') +
   scale_x_discrete(limits = c('AA', 'A', 'B', 'C', 'D', 'E', 'HR'))
 
 p3 <- ggplot(aes(x = ProsperRating..Alpha., y = LenderYield), 
        data = loan) +
-  geom_boxplot(aes(fill = ProsperRating..Alpha.))+
+  geom_boxplot(aes(fill = ProsperRating..Alpha.)) +
+  xlab('Prosper Rating')  +
+  ylab('Lender Yield') +
   scale_x_discrete(limits = c('AA', 'A', 'B', 'C', 'D', 'E', 'HR'))
 
 grid.arrange(p1, p2, p3, nrow = 3)
@@ -335,15 +351,21 @@ grid.arrange(p1, p2, p3, nrow = 3)
 ```{r echo=FALSE, Bivariate_Plots}
 b1 <- ggplot(aes(x = BorrowerAPR, y = CurrentDelinquencies), 
        data = subset(loan, !is.na(CurrentDelinquencies))) +
-  geom_point(alpha = 1/10, position = position_jitter(h = 0), color = I('#D02090'), size = 0.8)
+  geom_point(alpha = 1/10, position = position_jitter(h = 0), color = I('#D02090'), size = 0.8) +
+  xlab('Current Delinquencies')  +
+  ylab('Borrower APR')
 
 b2 <- ggplot(aes(x = BorrowerRate, y = CurrentDelinquencies), 
        data = subset(loan, !is.na(CurrentDelinquencies))) +
-  geom_point(alpha = 1/10, position = position_jitter(h = 0), color = I('#D02090'), size = 0.8)
+  geom_point(alpha = 1/10, position = position_jitter(h = 0), color = I('#D02090'), size = 0.8) +
+  xlab('Current Delinquencies')  +
+  ylab('Borrower Rate')
 
 b3 <- ggplot(aes(x = LenderYield, y = CurrentDelinquencies), 
        data = subset(loan, !is.na(CurrentDelinquencies))) +
-  geom_point(alpha = 1/10, position = position_jitter(h = 0), color = I('#D02090'), size = 0.8)
+  geom_point(alpha = 1/10, position = position_jitter(h = 0), color = I('#D02090'), size = 0.8) +
+  xlab('Current Delinquencies')  +
+  ylab('Lender Yield') 
 
 grid.arrange(b1, b2, b3, nrow = 3)
 ``` 
@@ -352,7 +374,9 @@ grid.arrange(b1, b2, b3, nrow = 3)
 ggplot(aes(x = DebtToIncomeRatio, y = CurrentDelinquencies), 
        data = subset(loan, !is.na(CurrentDelinquencies))) +
   geom_point(color = I('#D02090'), size = 0.8) +
-  geom_smooth(method = 'lm', color = 'yellow', size = 0.5)
+  geom_smooth(method = 'lm', color = 'yellow', size = 0.5) +
+  xlab('Current Delinquencies')  +
+  ylab('Debt to Income Ratio')
 
 ```
 
@@ -362,7 +386,9 @@ ggplot(aes(x = LoanOriginationQuarter, y = LoanOriginalAmount),
        data = subset(loan, !is.na(EmploymentStatus))) +
   geom_boxplot(aes(colour = EmploymentStatus), 
                outlier.colour = 'pink', outlier.shape = 4, outlier.size = 0.8) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  xlab('Quarter')  +
+  ylab('Loan Original Amount') +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
 ```
 
 ```{r echo=FALSE, Bivariate_Plots}
@@ -370,18 +396,26 @@ ggplot(aes(x = IncomeRange, y = DebtToIncomeRatio),
        data = subset(loan, !is.na(DebtToIncomeRatio))) +
   geom_boxplot(fill='#D02090', color="yellow",
                outlier.colour = '#D02090', outlier.shape = 4, outlier.size = 0.8) +
-  scale_x_discrete(limits = c('$1-24,999', '$25,000-49,999', '$50,000-74,999', '$75,000-99,999', '$100,000+'))
+  scale_x_discrete(limits = c('$1-24,999', '$25,000-49,999', '$50,000-74,999', '$75,000-99,999', '$100,000+')) +
+  xlab('Income Range')  +
+  ylab('Debt to Income Ratio') 
 ```
 
 ```{r echo=FALSE, Bivariate_Plots}
 ggplot(aes(x = StatedMonthlyIncome, y = MonthlyLoanPayment), data = loan) +
   geom_line(color = '#D02090') +
-  geom_smooth(color = 'yellow') 
+  geom_smooth(color = 'yellow') +
+  xlab('Monthly Income')  +
+  ylab('Monthly Loan Payment') 
 
 ```
 
 ```{r echo=FALSE, Bivariate_Plots}
-
+ggplot(aes(x = ProsperRating..Alpha., y = BorrowerState), data = loan) +
+  geom_point(aes(color = EmploymentStatus), size = 1.5) +
+  scale_x_discrete(limits = c('AA', 'A', 'B', 'C', 'D', 'E', 'HR')) +
+  xlab('Propser Rating')  +
+  ylab('State') 
 ```
 
 ```{r echo=FALSE, Bivariate_Plots}
