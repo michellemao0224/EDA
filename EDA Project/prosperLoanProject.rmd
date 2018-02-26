@@ -143,7 +143,8 @@ qplot(x = ProsperRating..Alpha., data = subset(loan, !is.na(ProsperScore)),
       xlab = 'Prosper Rating',
       ylab = 'Count',
       main = 'Prosper Rating of Borrower') +
-  geom_histogram(stat='count', fill= I('#FF82AB'), color='white')
+  geom_histogram(stat='count', fill= I('#FF82AB'), color='white')+
+  scale_x_discrete(limits = c('AA', 'A', 'B', 'C', 'D', 'E', 'HR'))
 
 ```
 
@@ -315,15 +316,18 @@ as well.
 ```{r echo=FALSE, Bivariate_Plots}
 p1 <- ggplot(aes(x = ProsperRating..Alpha., y = BorrowerAPR), 
        data = loan) +
-  geom_boxplot(aes(fill = ProsperRating..Alpha.))
+  geom_boxplot(aes(fill = ProsperRating..Alpha.)) +
+  scale_x_discrete(limits = c('AA', 'A', 'B', 'C', 'D', 'E', 'HR'))
 
 p2 <- ggplot(aes(x = ProsperRating..Alpha., y = BorrowerRate), 
        data = loan) +
-  geom_boxplot(aes(fill = ProsperRating..Alpha.))
+  geom_boxplot(aes(fill = ProsperRating..Alpha.)) +
+  scale_x_discrete(limits = c('AA', 'A', 'B', 'C', 'D', 'E', 'HR'))
 
 p3 <- ggplot(aes(x = ProsperRating..Alpha., y = LenderYield), 
        data = loan) +
-  geom_boxplot(aes(fill = ProsperRating..Alpha.))
+  geom_boxplot(aes(fill = ProsperRating..Alpha.))+
+  scale_x_discrete(limits = c('AA', 'A', 'B', 'C', 'D', 'E', 'HR'))
 
 grid.arrange(p1, p2, p3, nrow = 3)
 ```
@@ -357,17 +361,22 @@ ggplot(aes(x = DebtToIncomeRatio, y = CurrentDelinquencies),
 ggplot(aes(x = LoanOriginationQuarter, y = LoanOriginalAmount), 
        data = subset(loan, !is.na(EmploymentStatus))) +
   geom_boxplot(aes(colour = EmploymentStatus), 
-               outlier.colour = 'Pink', outlier.shape = 4, outlier.size = 0.8) +
+               outlier.colour = 'pink', outlier.shape = 4, outlier.size = 0.8) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
 ```{r echo=FALSE, Bivariate_Plots}
 ggplot(aes(x = IncomeRange, y = DebtToIncomeRatio), 
        data = subset(loan, !is.na(DebtToIncomeRatio))) +
-  geom_boxplot()
+  geom_boxplot(fill='#D02090', color="yellow",
+               outlier.colour = '#D02090', outlier.shape = 4, outlier.size = 0.8) +
+  scale_x_discrete(limits = c('$1-24,999', '$25,000-49,999', '$50,000-74,999', '$75,000-99,999', '$100,000+'))
 ```
 
 ```{r echo=FALSE, Bivariate_Plots}
+ggplot(aes(x = StatedMonthlyIncome, y = MonthlyLoanPayment), data = loan) +
+  geom_line(color = '#D02090') +
+  geom_smooth(color = 'yellow') 
 
 ```
 
