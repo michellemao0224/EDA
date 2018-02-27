@@ -31,6 +31,8 @@ library(scales)
 library(memisc)
 library(bitops)
 library(RCurl)
+library(dplyr)
+library(tidyr)
 ```
 
 ```{r echo=FALSE, Load_the_Data}
@@ -175,25 +177,6 @@ ggplot(aes(x=reorder(IncomeRange,IncomeRange,
 
 ```
 
-```{r echo=FALSE, Univariate_Plots}
-library('ggmap')
-library('maptools')
-library('maps')
-
-states <- loan$BorrowerState
-ll.states <- geocode(states)
-state.x <- ll.states$lon
-state.y <- ll.states$lat
-
-statesmap <- map_data("state")
-
-bs <- ggplot(data = statesmap) + 
-  geom_polygon(aes(x = long, y = lat, fill = region, group = group), color = "white") + 
-  coord_fixed(1.3) +
-  guides(fill=FALSE) 
-
-bs <- bs + geom_point(aes(x = state.x, y =  state.y), color = 'red', size = 3)
-```
 
 ```{r echo=FALSE, Univariate_Plots}
 
@@ -484,6 +467,129 @@ more complex interactions between variables. Make sure that the plots that you
 create here are justified by the plots you explored in the previous section. If
 you plan on creating any mathematical models, this is the section where you
 will do that.
+
+```{r echo=FALSE, Multivariate_Plots}
+loan.di_by_income_rate <- loan %>%
+  filter(!is.na(ProsperRating..Alpha.)) %>%
+  group_by(IncomeRange, ProsperRating..Alpha.) %>%
+  summarise(mean_BorrowerAPR = mean(BorrowerAPR),
+            median_BorrowerAPR = median(BorrowerAPR),
+            n = n()) %>%
+  ungroup() %>%
+  arrange(IncomeRange)
+head(loan.di_by_income_rate, 50)
+
+ggplot(aes(x = IncomeRange, y = median_BorrowerAPR),
+       data = subset(loan.di_by_income_rate, !is.na(IncomeRange) & IncomeRange != 'Not displayed')) +
+  geom_point(aes(color = ProsperRating..Alpha.)) +
+  xlab('Income Range') +
+  ylab('Median Borrower APR') +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
+
+
+```
+
+```{r echo=FALSE, Multivariate_Plots}
+loan.di_by_income_rate.wide <- dcast(loan.di_by_income_rate,
+                                  IncomeRange ~ ProsperRating..Alpha.,
+                                  value.val = 'median_BorrowerAPR')
+
+loan.di_by_income_rate.wide <-
+  subset(loan.di_by_income_rate[c('IncomeRange', 'ProsperRating..Alpha.', 'median_BorrowerAPR')],
+         !is.na(ProsperRating..Alpha.)) %>%
+  spread(ProsperRating..Alpha., median_BorrowerAPR) %>%
+  mutate(ratio = AA / A)
+
+head(loan.di_by_income_rate.wide)
+
+pr1 <- ggplot(aes(x = IncomeRange, y = AA / A), 
+       data = subset(loan.di_by_income_rate.wide, !is.na(IncomeRange) & IncomeRange != 'Not displayed')) +
+  geom_point(color = '#FF0000') +
+  geom_hline(yintercept = 0.7, alpha = 0.3, linetype = 2) +
+  xlab('Income Range') +
+  ylab('Ratio: AA / A ') +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1)) 
+
+loan.di_by_income_rate.wide <-
+  subset(loan.di_by_income_rate[c('IncomeRange', 'ProsperRating..Alpha.', 'median_BorrowerAPR')],
+         !is.na(ProsperRating..Alpha.)) %>%
+  spread(ProsperRating..Alpha., median_BorrowerAPR) %>%
+  mutate(ratio = A / B)
+
+pr2 <- ggplot(aes(x = IncomeRange, y = A / B), 
+       data = subset(loan.di_by_income_rate.wide, !is.na(IncomeRange) & IncomeRange != 'Not displayed')) +
+  geom_point(color = '#FF1493') +
+  geom_hline(yintercept = 0.75, alpha = 0.3, linetype = 2) +
+  xlab('Income Range') +
+  ylab('Ratio:A / B ') +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1)) 
+
+loan.di_by_income_rate.wide <-
+  subset(loan.di_by_income_rate[c('IncomeRange', 'ProsperRating..Alpha.', 'median_BorrowerAPR')],
+         !is.na(ProsperRating..Alpha.)) %>%
+  spread(ProsperRating..Alpha., median_BorrowerAPR) %>%
+  mutate(ratio = B / C)
+
+pr3 <- ggplot(aes(x = IncomeRange, y = B / C), 
+       data = subset(loan.di_by_income_rate.wide, !is.na(IncomeRange) & IncomeRange != 'Not displayed')) +
+  geom_point(color = '#EEEE00') +
+  geom_hline(yintercept = 0.8, alpha = 0.3, linetype = 2) +
+  xlab('Income Range') +
+  ylab('Ratio: B / C ') +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1)) 
+
+loan.di_by_income_rate.wide <-
+  subset(loan.di_by_income_rate[c('IncomeRange', 'ProsperRating..Alpha.', 'median_BorrowerAPR')],
+         !is.na(ProsperRating..Alpha.)) %>%
+  spread(ProsperRating..Alpha., median_BorrowerAPR) %>%
+  mutate(ratio = C / D)
+
+pr4 <- ggplot(aes(x = IncomeRange, y = C / D), 
+       data = subset(loan.di_by_income_rate.wide, !is.na(IncomeRange) & IncomeRange != 'Not displayed')) +
+  geom_point(color = '#66CD00') +
+  geom_hline(yintercept = 0.8, alpha = 0.3, linetype = 2) +
+  xlab('Income Range') +
+  ylab('Ratio: C / D ') +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1)) 
+
+loan.di_by_income_rate.wide <-
+  subset(loan.di_by_income_rate[c('IncomeRange', 'ProsperRating..Alpha.', 'median_BorrowerAPR')],
+         !is.na(ProsperRating..Alpha.)) %>%
+  spread(ProsperRating..Alpha., median_BorrowerAPR) %>%
+  mutate(ratio = D / E)
+
+pr5 <- ggplot(aes(x = IncomeRange, y = D / E), 
+       data = subset(loan.di_by_income_rate.wide, !is.na(IncomeRange) & IncomeRange != 'Not displayed')) +
+  geom_point(color = '#5CACEE') +
+  geom_hline(yintercept = 0.85, alpha = 0.3, linetype = 2) +
+  xlab('Income Range') +
+  ylab('Ratio: D / E ') +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1)) 
+
+loan.di_by_income_rate.wide <-
+  subset(loan.di_by_income_rate[c('IncomeRange', 'ProsperRating..Alpha.', 'median_BorrowerAPR')],
+         !is.na(ProsperRating..Alpha.)) %>%
+  spread(ProsperRating..Alpha., median_BorrowerAPR) %>%
+  mutate(ratio = E / HR)
+
+pr6 <- ggplot(aes(x = IncomeRange, y = E / HR), 
+       data = subset(loan.di_by_income_rate.wide, !is.na(IncomeRange) & IncomeRange != 'Not displayed')) +
+  geom_point(color = '#9A32CD') +
+  geom_hline(yintercept = 0.95, alpha = 0.3, linetype = 2) +
+  xlab('Income Range') +
+  ylab('Ratio: E / HR ') +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1))
+
+grid.arrange(pr1, pr2, pr3, pr4, pr5, pr6, ncol = 2)
+```
+
+```{r echo=FALSE, Multivariate_Plots}
+
+```
+
+```{r echo=FALSE, Multivariate_Plots}
+
+```
 
 ```{r echo=FALSE, Multivariate_Plots}
 
