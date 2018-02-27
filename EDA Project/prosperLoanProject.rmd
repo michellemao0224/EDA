@@ -584,15 +584,42 @@ grid.arrange(pr1, pr2, pr3, pr4, pr5, pr6, ncol = 2)
 ```
 
 ```{r echo=FALSE, Multivariate_Plots}
+loan.amount_by_state_yield <- loan %>%
+  filter(!is.na(BorrowerState)) %>%
+  group_by(LoanOriginalAmount, BorrowerState) %>%
+  summarise(mean_LenderYield = mean(LenderYield),
+            median_LenderYield = median(LenderYield),
+            n = n()) %>%
+  ungroup() %>%
+  arrange(LoanOriginalAmount)
+head(loan.amount_by_state_yield, 50)
 
+ggplot(aes(x = BorrowerState, y = median_LenderYield),
+       data = subset(loan.amount_by_state_yield, !is.na(BorrowerState))) +
+  geom_point(aes(color = LoanOriginalAmount), size = 1.5) +
+  ylim(0, 0.35) +
+  xlab('Borrower State') +
+  ylab('Median Lender Yield') +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) 
 ```
 
 ```{r echo=FALSE, Multivariate_Plots}
+loan.di_by_income_delienquncy <- loan %>%
+  filter(!is.na(DebtToIncomeRatio)) %>%
+  group_by(IncomeRange, DebtToIncomeRatio) %>%
+  summarise(mean_CurrentDelinquencies = mean(CurrentDelinquencies),
+            n = n()) %>%
+  ungroup() %>%
+  arrange(IncomeRange)
+head(loan.di_by_income_delienquncy, 50)
 
-```
-
-```{r echo=FALSE, Multivariate_Plots}
-
+ggplot(aes(x = IncomeRange, y = mean_CurrentDelinquencies),
+       data = subset(loan.di_by_income_delienquncy, !is.na(IncomeRange) & IncomeRange != 'Not displayed')) +
+  geom_point(aes(color = DebtToIncomeRatio), size = 1.5) +
+  scale_y_continuous(trans = log10_trans()) +
+  xlab('Income Range') +
+  ylab('Average Current Delinquencies') +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
 ```
 
 # Multivariate Analysis
