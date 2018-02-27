@@ -506,6 +506,8 @@ pr1 <- ggplot(aes(x = IncomeRange, y = AA / A),
        data = subset(loan.di_by_income_rate.wide, !is.na(IncomeRange) & IncomeRange != 'Not displayed')) +
   geom_point(color = '#FF0000') +
   geom_hline(yintercept = 0.7, alpha = 0.3, linetype = 2) +
+  scale_x_discrete(
+    limits = c('Not employed', '$1-24,999', '$25,000-49,999', '$50,000-74,999', '$75,000-99,999', '$100,000+')) +
   xlab('Income Range') +
   ylab('Ratio: AA / A ') +
   theme(axis.text.x = element_text(angle = 30, hjust = 1)) 
@@ -520,6 +522,8 @@ pr2 <- ggplot(aes(x = IncomeRange, y = A / B),
        data = subset(loan.di_by_income_rate.wide, !is.na(IncomeRange) & IncomeRange != 'Not displayed')) +
   geom_point(color = '#FF1493') +
   geom_hline(yintercept = 0.75, alpha = 0.3, linetype = 2) +
+  scale_x_discrete(
+    limits = c('Not employed', '$1-24,999', '$25,000-49,999', '$50,000-74,999', '$75,000-99,999', '$100,000+')) +
   xlab('Income Range') +
   ylab('Ratio:A / B ') +
   theme(axis.text.x = element_text(angle = 30, hjust = 1)) 
@@ -534,6 +538,8 @@ pr3 <- ggplot(aes(x = IncomeRange, y = B / C),
        data = subset(loan.di_by_income_rate.wide, !is.na(IncomeRange) & IncomeRange != 'Not displayed')) +
   geom_point(color = '#EEEE00') +
   geom_hline(yintercept = 0.8, alpha = 0.3, linetype = 2) +
+  scale_x_discrete(
+    limits = c('Not employed', '$1-24,999', '$25,000-49,999', '$50,000-74,999', '$75,000-99,999', '$100,000+')) +
   xlab('Income Range') +
   ylab('Ratio: B / C ') +
   theme(axis.text.x = element_text(angle = 30, hjust = 1)) 
@@ -548,6 +554,8 @@ pr4 <- ggplot(aes(x = IncomeRange, y = C / D),
        data = subset(loan.di_by_income_rate.wide, !is.na(IncomeRange) & IncomeRange != 'Not displayed')) +
   geom_point(color = '#66CD00') +
   geom_hline(yintercept = 0.8, alpha = 0.3, linetype = 2) +
+  scale_x_discrete(
+    limits = c('Not employed', '$1-24,999', '$25,000-49,999', '$50,000-74,999', '$75,000-99,999', '$100,000+')) +
   xlab('Income Range') +
   ylab('Ratio: C / D ') +
   theme(axis.text.x = element_text(angle = 30, hjust = 1)) 
@@ -562,6 +570,8 @@ pr5 <- ggplot(aes(x = IncomeRange, y = D / E),
        data = subset(loan.di_by_income_rate.wide, !is.na(IncomeRange) & IncomeRange != 'Not displayed')) +
   geom_point(color = '#5CACEE') +
   geom_hline(yintercept = 0.85, alpha = 0.3, linetype = 2) +
+  scale_x_discrete(
+    limits = c('Not employed', '$1-24,999', '$25,000-49,999', '$50,000-74,999', '$75,000-99,999', '$100,000+')) +
   xlab('Income Range') +
   ylab('Ratio: D / E ') +
   theme(axis.text.x = element_text(angle = 30, hjust = 1)) 
@@ -576,6 +586,8 @@ pr6 <- ggplot(aes(x = IncomeRange, y = E / HR),
        data = subset(loan.di_by_income_rate.wide, !is.na(IncomeRange) & IncomeRange != 'Not displayed')) +
   geom_point(color = '#9A32CD') +
   geom_hline(yintercept = 0.95, alpha = 0.3, linetype = 2) +
+  scale_x_discrete(
+    limits = c('Not employed', '$1-24,999', '$25,000-49,999', '$50,000-74,999', '$75,000-99,999', '$100,000+')) +
   xlab('Income Range') +
   ylab('Ratio: E / HR ') +
   theme(axis.text.x = element_text(angle = 30, hjust = 1))
@@ -617,9 +629,11 @@ ggplot(aes(x = IncomeRange, y = mean_CurrentDelinquencies),
        data = subset(loan.di_by_income_delienquncy, !is.na(IncomeRange) & IncomeRange != 'Not displayed')) +
   geom_point(aes(color = DebtToIncomeRatio), size = 1.5) +
   scale_y_continuous(trans = log10_trans()) +
+  scale_x_discrete(
+    limits = c('Not employed', '$1-24,999', '$25,000-49,999', '$50,000-74,999', '$75,000-99,999', '$100,000+')) +
   xlab('Income Range') +
   ylab('Average Current Delinquencies') +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
+  theme(axis.text.x = element_text(angle = 30, hjust = 1)) 
 ```
 
 # Multivariate Analysis
@@ -647,27 +661,102 @@ make sure you justify why you chose each plot by describing what it shows.
 
 ### Plot One
 ```{r echo=FALSE, Plot_One}
+loan.income_by_amount <- loan %>%
+  filter(!is.na(IncomeRange)) %>%
+  group_by(IncomeRange) %>%
+  summarise(mean_LoanOriginalAmount = mean(LoanOriginalAmount),
+            n = n()) %>%
+  ungroup() %>%
+  arrange(IncomeRange)
+head(loan.income_by_amount, 50)
+
+ggplot(aes(x = IncomeRange, y = mean_LoanOriginalAmount),
+       data = subset(loan.income_by_amount, !is.na(IncomeRange))) +
+  geom_point(color = '#B22222', size = 2) +
+  scale_x_discrete(
+    limits = c('Not employed', '$1-24,999', '$25,000-49,999', '$50,000-74,999', '$75,000-99,999', '$100,000+')) +
+  xlab('Income Range') +
+  ylab('Average Loan Original Amount') +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1)) 
 
 ```
 
 ### Description One
-
+Customer Quality
 
 ### Plot Two
 ```{r echo=FALSE, Plot_Two}
+loan.apr_by_income <- loan %>%
+  filter(!is.na(LoanOriginalAmount)) %>%
+  group_by(LoanOriginalAmount, ProsperRating..Alpha.) %>%
+  summarise(mean_BorrowerAPR = mean(BorrowerAPR),
+            n = n()) %>%
+  ungroup() %>%
+  arrange(LoanOriginalAmount)
+head(loan.apr_by_income, 50)
+
+pro1 <- ggplot(aes(x = LoanOriginalAmount, y = mean_BorrowerAPR),
+       data = subset(loan.apr_by_income, !is.na(mean_BorrowerAPR))) +
+  geom_point(aes(color = ProsperRating..Alpha.)) +
+  xlab('Loan Original Amount') +
+  ylab('Average Borrower APR') 
+
+loan.rate_by_income <- loan %>%
+  filter(!is.na(LoanOriginalAmount)) %>%
+  group_by(LoanOriginalAmount, ProsperRating..Alpha.) %>%
+  summarise(mean_BorrowerRate = mean(BorrowerRate),
+            n = n()) %>%
+  ungroup() %>%
+  arrange(LoanOriginalAmount)
+
+pro2 <- ggplot(aes(x = LoanOriginalAmount, y = mean_BorrowerRate),
+       data = subset(loan.rate_by_income, !is.na(mean_BorrowerRate))) +
+  geom_point(aes(color = ProsperRating..Alpha.)) +
+  xlab('Loan Original Amount') +
+  ylab('Average Borrower Rate')
+
+loan.yield_by_income <- loan %>%
+  filter(!is.na(LoanOriginalAmount)) %>%
+  group_by(LoanOriginalAmount, ProsperRating..Alpha.) %>%
+  summarise(mean_LenderYield = mean(LenderYield),
+            n = n()) %>%
+  ungroup() %>%
+  arrange(LoanOriginalAmount)
+
+pro3 <- ggplot(aes(x = LoanOriginalAmount, y = mean_LenderYield),
+       data = subset(loan.yield_by_income, !is.na(mean_LenderYield))) +
+  geom_point(aes(color = ProsperRating..Alpha.)) +
+  xlab('Loan Original Amount') +
+  ylab('Average Lender Yield') 
+
+grid.arrange(pro1, pro2, pro3, ncol = 1)
 
 ```
 
 ### Description Two
-
+Bank Profitability
 
 ### Plot Three
 ```{r echo=FALSE, Plot_Three}
+loan.loss_by_rate_delienquncy <- loan %>%
+  filter(!is.na(EstimatedLoss)) %>%
+  group_by(ProsperRating..Alpha., EstimatedLoss) %>%
+  summarise(mean_CurrentDelinquencies = mean(CurrentDelinquencies),
+            n = n()) %>%
+  ungroup() %>%
+  arrange(ProsperRating..Alpha.)
+head(loan.loss_by_rate_delienquncy, 50)
 
+ggplot(aes(x = ProsperRating..Alpha., y = mean_CurrentDelinquencies),
+       data = subset(loan.loss_by_rate_delienquncy, !is.na(ProsperRating..Alpha.))) +
+  geom_point(aes(color = EstimatedLoss), size = 1.5) +
+  scale_x_discrete(limits = c('AA', 'A', 'B', 'C', 'D', 'E', 'HR')) +
+  xlab('Prosper Rating') +
+  ylab('Average Current Delinquencies') 
 ```
 
 ### Description Three
-
+Credit Risk
 ------
 
 # Reflection
