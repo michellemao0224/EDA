@@ -86,6 +86,7 @@ This shows the difference about what the actual interest rate the borrower haven
 
 > Basic Loan Information
 
+By looking at the frequent plot, the majority of borrowers (over 80,000) nomally prefer the term of 36 years. Around 25,000 borrowers choose the term of 60 years. Very few borrower like to lend the loan in very short term.
 ```{r echo=FALSE, Univariate_Plots}
 # check which term borrower perfer to have the loan
 qplot(x = Term, data = loan,
@@ -94,12 +95,13 @@ qplot(x = Term, data = loan,
       main = 'How long borrower lend the loan',
       binwidth = 12, fill= I('#FF6EB4')) +
   scale_x_continuous(lim = c(0, 72), breaks = seq(0, 72, 12))
-
-summary(loan$Term)
-
 ```
 # From the histogram, over 75000 people choose the loan term in 36 years, much higher than 60 years. However, we can see not many people choose the year of term in 12 years.
 
+```{r echo=FALSE, Univariate_Plots}
+summary(loan$Term)
+```
+# We can see that people normally lend the loan around 4,000, also 10,000 and 15,000 are also the popular loan amount for borrowers. This frequency plot is positively skewed but appeared small peaks in every 5,000.
 ```{r echo=FALSE, Univariate_Plots}
 
 qplot(x = LoanOriginalAmount, data = loan,
