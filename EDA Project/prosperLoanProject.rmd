@@ -116,6 +116,7 @@ qplot(x = LoanOriginalAmount, data = loan,
 
 > Basic Borrower Information
 
+Now let's dive into basic borrower info!
 ```{r echo=FALSE, Univariate_Plots}
 qplot(x = IsBorrowerHomeowner, data = subset(loan, !is.na(ProsperScore)),
       xlab = 'Home Owner',
@@ -123,7 +124,7 @@ qplot(x = IsBorrowerHomeowner, data = subset(loan, !is.na(ProsperScore)),
       main = 'Number of Home Owner Borrower') +
   geom_histogram(stat='count', fill= I('#FF82AB'), color='white')
 ```
-
+# Over half borrowers are home owner which shows the most of the loan borrower has strong debt paying ability.
 ```{r echo=FALSE, Univariate_Plots}
 
 qplot(x = ProsperRating..Alpha., data = subset(loan, !is.na(ProsperScore)),
@@ -134,6 +135,9 @@ qplot(x = ProsperRating..Alpha., data = subset(loan, !is.na(ProsperScore)),
   scale_x_discrete(limits = c('AA', 'A', 'B', 'C', 'D', 'E', 'HR'))
 
 ```
+# Except for empty values, the distribution of the ordinal variable has a bell-like shape. ‘C’ is the most frequent rating in our data and the highest (AA) and the lowest (HR) rating are less common comparing with other ratings in between. 
+
+Missing values are surprisingly high. After done the research, I found the Prosper Rating only exists after July 2009. Cross-validated from the loan original date, our data approved my assumption.
 
 ```{r echo=FALSE, Univariate_Plots}
 
