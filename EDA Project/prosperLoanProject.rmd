@@ -174,7 +174,8 @@ ggplot(aes(x = reorder(Occupation, Occupation,
 
 ggplot(aes(x=reorder(IncomeRange,IncomeRange,
                      function(x)-length(x)),
-           fill = I("#FF82AB")), data = loan) + 
+           fill = I("#FF82AB")), 
+       data = subset(loan, IncomeRange != '$0' & IncomeRange != 'Not displayed')) + 
   geom_bar() +
   xlab('Income Range')  +
   ylab('Count') +
@@ -306,18 +307,31 @@ reflect on and summarize what you've found. Use the questions below to help you
 gather your observations and add your own if you have other thoughts!
 
 ### What is the structure of your dataset?
+The structure of the dataset covers the different loan interest rates, borrower's employment status and income, liability ratio, delinquency records, etc.
 
 ### What is/are the main feature(s) of interest in your dataset?
+Main Features:
+1) Interest Rate: BorrowerAPR, BorrowerRate, LendYield
+2) Credit Rating: ProsperRating..Alpha., ProsperScore
+3) Loan Status: Term, LoanOriginalAmount, BorrowerState, LoanOriginationQuarter
+4) Borrower Profile: IncomeRange, DebtToIncomeRatio, EmploymentStatus, MonthlyLoanPayment
+5) Delinquency Record: CurrentDelinquencies, DelinquenciesLast7Years, PublicRecordsLast12Months
 
 ### What other features in the dataset do you think will help support your \
 investigation into your feature(s) of interest?
+1) LP_CustomerPayments, LP_CustomerPrincipalPayments, LP_InterestandFees, LP_ServicesFees
+Supporting to find how much profit the bank or loan providers can gain
+2) IsBorrowerHomeOwner, Occupation
+Supporting to find borrower's income source
 
 ### Did you create any new variables from existing variables in the dataset?
+Created the annual income by calculating the stated monthly income
 
 ### Of the features you investigated, were there any unusual distributions? \
 Did you perform any operations on the data to tidy, adjust, or change the form \
 of the data? If so, why did you do this?
-
+I cleaned the income range data, because the not displayed income or null value will affect to see the percentage of each income range.
+I also excluded several missing values in few variables, such as: DebtToIncomeRatio, BankCardUtilization.
 
 # Bivariate Plots Section
 
