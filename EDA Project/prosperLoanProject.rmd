@@ -23,11 +23,13 @@ library(bitops)
 library(RCurl)
 library(dplyr)
 library(tidyr)
+
 ```
 
 ```{r echo=FALSE, Load_the_Data}
 # Load the Data
 loan <- read.csv('prosperLoanData.csv')
+
 ```
 *** 
 The dataset is comprised of 81 variables and contains 113937 entries. The variable that are explored in the dataset are the following Term : Amount of month customers opted for loan
@@ -72,8 +74,10 @@ A basic exploration of the datset would give the following information
 
 ***
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
+
 names(loan)
 summary(loan)
+
 ```
 
 > The prosper loan data can allow me to explore:
@@ -87,6 +91,7 @@ This shows the difference about what the actual interest rate the borrower haven
 > Basic Loan Information
 
 # By looking at the frequent plot, the majority of borrowers (over 80,000) nomally prefer the term of 36 years. Around 25,000 borrowers choose the term of 60 years. Very few borrower like to lend the loan in very short term.
+
 ```{r echo=FALSE, Univariate_Plots}
 # check which term borrower perfer to have the loan
 qplot(x = Term, data = loan,
@@ -95,13 +100,17 @@ qplot(x = Term, data = loan,
       main = 'How long borrower lend the loan',
       binwidth = 12, fill= I('#FF6EB4')) +
   scale_x_continuous(lim = c(0, 72), breaks = seq(0, 72, 12))
+
 ```
+
 # From the histogram, over 75000 people choose the loan term in 36 years, much higher than 60 years. However, we can see not many people choose the year of term in 12 years.
 
 ```{r echo=FALSE, Univariate_Plots}
 summary(loan$Term)
 ```
+
 # We can see that people normally lend the loan around 4,000, also 10,000 and 15,000 are also the popular loan amount for borrowers. This frequency plot is positively skewed but appeared small peaks in every 5,000.
+
 ```{r echo=FALSE, Univariate_Plots}
 
 qplot(x = LoanOriginalAmount, data = loan,
@@ -117,14 +126,19 @@ qplot(x = LoanOriginalAmount, data = loan,
 > Basic Borrower Information
 
 # Now let's dive into basic borrower info!
+
 ```{r echo=FALSE, Univariate_Plots}
+
 qplot(x = IsBorrowerHomeowner, data = subset(loan, !is.na(ProsperScore)),
       xlab = 'Home Owner',
       ylab = 'Count',
       main = 'Number of Home Owner Borrower') +
   geom_histogram(stat='count', fill= I('#FF82AB'), color='white')
+
 ```
+
 # Over half borrowers are home owner which shows the most of the loan borrower has strong debt paying ability.
+
 ```{r echo=FALSE, Univariate_Plots}
 
 qplot(x = ProsperRating..Alpha., data = subset(loan, !is.na(ProsperScore)),
@@ -135,6 +149,7 @@ qplot(x = ProsperRating..Alpha., data = subset(loan, !is.na(ProsperScore)),
   scale_x_discrete(limits = c('AA', 'A', 'B', 'C', 'D', 'E', 'HR'))
 
 ```
+
 # Except for empty values, the distribution of the ordinal variable has a bell-like shape. ‘C’ is the most frequent rating in our data and the highest (AA) and the lowest (HR) rating are less common comparing with other ratings in between. 
 
 Missing values are surprisingly high. After done the research, I found the Prosper Rating only exists after July 2009. Cross-validated from the loan original date, our data approved my assumption.
@@ -152,7 +167,9 @@ ggplot(aes(x = reorder(Occupation, Occupation,
   theme(axis.text = element_text(size = 8))
 
 ```
+
 # Apart from other occupations, professional occupies a large part of the count. Why bank and loan providers prefer to lend the loan to professional? The reason behind is they have stable and high income compared to others whilst they work on more techniqual job, which show the strong debt paying ability.
+
 ```{r echo=FALSE, Univariate_Plots}
 
 ggplot(aes(x=reorder(IncomeRange,IncomeRange,
@@ -165,6 +182,7 @@ ggplot(aes(x=reorder(IncomeRange,IncomeRange,
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 ```
+
 # From income perspective, we can see most borrower's income range is $25,000 - 49,999, the second top is the income range $50,000 - 74,999. This can explain that most people who has an income range $25,000 - 49,999 is the new graduate or young professional, they have a very strong buying power to purchase their first home or car.
 
 ```{r echo=FALSE, Univariate_Plots}
@@ -180,15 +198,20 @@ ggplot(aes(x = AnnualIncome), data = loan) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 ```
+
 # Further, we look at the anuual income of the borrower, this positive skewed frequency plot shows the result as same as the frequency income range plot and repeatively confirms the strong buying power coming from young professionals.  
+
 ```{r echo=FALSE, Univariate_Plots}
+
 ggplot(aes(x = BorrowerState), data = loan) +
   geom_histogram(aes(color = EmploymentStatus), stat="count", fill = 'white') +
   xlab('Borrower State')  +
   ylab('Count') +
   ggtitle('Number of Borrower in Each State') +
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
 ```
+
 # We also care about which state has most borrower. The highest number of borrower is in CA, and it demonstrates that the California consumers have some of the higest levels of debt in the country. Moreover, the following Texas, New York and Florida can also be seen as a big loan market.
 
 > Credit History
@@ -204,7 +227,9 @@ ggplot(aes(x = CurrentDelinquencies), data = loan) +
   ggtitle('How many times of current delinquency')
 
 ```
+
 # Large proportion of borrowers only occurs one delinquency record. It normally because they forget to pay the annual fee for the credit card, or because they forget to repay one month loan.
+
 ```{r echo=FALSE, Univariate_Plots}
 
 c1 <- ggplot(aes(x = DelinquenciesLast7Years), data = loan) +
@@ -226,7 +251,9 @@ c2 <- ggplot(aes(x = PublicRecordsLast10Years), data = loan) +
 grid.arrange(c1, c2, nrow = 2)
 
 ```
+
 # By checking the delinquency records last 7 years and public delinquency records last 10 years, it appears that having one delinquency records still the highest. But it's strange to see few borrowers have more than 30 times delinquencies.
+
 ```{r echo=FALSE, Univariate_Plots}
 
 ggplot(aes(x = BankcardUtilization), data = subset(loan, !is.na(BankcardUtilization))) +
@@ -238,9 +265,11 @@ ggplot(aes(x = BankcardUtilization), data = subset(loan, !is.na(BankcardUtilizat
   ggtitle('How many times the borrower use the bank card')
 
 ```
+
 # Then how often the borrower use their bank card?
 We can see the majority bank card utilization frequency is over 0.5 and reach the peak at the 0.9.
 This can fully demonstrate how much borrower adore the bank card.
+
 ```{r echo=FALSE, Univariate_Plots}
 
 ggplot(aes(x = TradesNeverDelinquent..percentage.), 
@@ -254,7 +283,10 @@ ggplot(aes(x = TradesNeverDelinquent..percentage.),
 
 ```
 
+# From the records of never delinquent trade, we can tell from this negative skewed histogram that most borrowers keep themselves having a good credit rating and value the lend money. Only few of them has a percentage below 0.50 that we can base on this record to select our loan borrowers and decide whether we want to deal with loan repayment with them or not.
+
 ```{r echo=FALSE, Univariate_Plots}
+
 ggplot(aes(x = DebtToIncomeRatio), data = subset(loan, !is.na( DebtToIncomeRatio))) +
   geom_histogram(fill= I('#E066FF'), color='white') +
   scale_x_continuous(lim = c(0, 1.0), breaks = seq(0, 1.0, 0.05)) +
@@ -262,13 +294,10 @@ ggplot(aes(x = DebtToIncomeRatio), data = subset(loan, !is.na( DebtToIncomeRatio
   xlab('Ratio of Debt and Income')  +
   ylab('Count') +
   ggtitle('What is the ratio of debt and income')
+
 ```
 
-> **Tip**: Make sure that you leave a blank line between the start / end of
-each code block and the end / start of your Markdown text so that it is
-formatted nicely in the knitted text. Note as well that text on consecutive
-lines is treated as a single space. Make sure you have a blank line between
-your paragraphs so that they too are formatted for easy readability.
+# We also want to know how much debt burden that our borrower carry. The distribution of this frequency plot shows that the majority of borrower has a debt and income ratio less than 0.40. The ratio reaches the peak at 0.20. The borrowers's income can fully cover their debts, and it also obey the rule of "ratio of debt and income should 0.85 or 0.8".
 
 # Univariate Analysis
 
