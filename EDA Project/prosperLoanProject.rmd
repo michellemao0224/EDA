@@ -150,7 +150,9 @@ qplot(x = ProsperRating..Alpha., data = subset(loan, !is.na(ProsperScore)),
 
 ```
 
-# Except for empty values, the distribution of the ordinal variable has a bell-like shape. ‘C’ is the most frequent rating in our data and the highest (AA) and the lowest (HR) rating are less common comparing with other ratings in between. 
+# Prosper has seven loan grades called Prosper Ratings: AA, A, B, C, D, E and HR where AA is the lowest risk down to HR which actually stands for high risk. 
+
+Except for empty values, the distribution of the ordinal variable has a bell-like shape. ‘C’ is the most frequent rating in our data and the highest (AA) and the lowest (HR) rating are less common comparing with other ratings in between. 
 
 Missing values are surprisingly high. After done the research, I found the Prosper Rating only exists after July 2009. Cross-validated from the loan original date, our data approved my assumption.
 
@@ -362,6 +364,9 @@ ggplot(aes(x = LoanOriginationQuarter, y = LoanOriginalAmount),
 
 ```
 
+# Loan amount slightly increased from the end of 2006 to 2007. However, as the subprime mortgage crisis spreaded to the whole nation and worldwide exploded, the loan amount jumped dramatically from 2008 to 2009.
+Nevertheless, since 2010, the loan amount has an exponential growth. More and more people need cash, and the financial market is very active.
+
 ```{r echo=FALSE, Bivariate_Plots}
 
 ggplot(aes(x = IncomeRange, y = DebtToIncomeRatio), 
@@ -374,6 +379,8 @@ ggplot(aes(x = IncomeRange, y = DebtToIncomeRatio),
   ylab('Debt to Income Ratio') 
 
 ```
+
+# From above plot we can see that people with less income would have heavier mortgage burden. The average debt to income ratio of the $1-24,999 group is slightly higher than $25,000 - 49,999 group. But it's worth to note that the outliers of the $1- 24,999 group are much more than the others, and it's strange to see some borrowers have debt to income ratio in 10.0.
 
 ```{r echo=FALSE, Bivariate_Plots}
 
@@ -399,6 +406,8 @@ grid.arrange(m1, m2, nrow = 2)
 
 ```
 
+# Compared mmonthly loan payment and debt to income ration in terms of monthly income, monthly loan payment is heavily concentrated on monthly income range $0 to $ 10000. However, debt to income ratio shows a positive skewed distribution.
+
 ```{r echo=FALSE, Bivariate_Plots}
 
 ggplot(aes(x = ProsperRating..Alpha., y = BorrowerState), data = loan) +
@@ -408,6 +417,10 @@ ggplot(aes(x = ProsperRating..Alpha., y = BorrowerState), data = loan) +
   ylab('State') 
 
 ```
+
+# This plot can show us in each state which employment status has what prosper rating. 
+The ND and IA have missing value. 
+Self-employed borrower in MA and OR has the worst propser rating (HR) and highest risk. On the contrary, self-employed borrower in AL has the best prosper rating (AA).
 
 ```{r echo=FALSE, Bivariate_Plots}
 
@@ -420,6 +433,9 @@ ggplot(aes(x = TotalTrades, y = BankcardUtilization),
   ylab('Bank Card Utilization') 
 
 ```
+
+# From the line plot, as the total trades grow, the average bank card utilization varies from 0.5 to 0.75 then back to 0.6.
+If the total trades less than 50 times, then the bank card utilization is very efficient, which means the borrower is more likely to use the bank card to do transaction.
 
 > Bank Profitability
 
