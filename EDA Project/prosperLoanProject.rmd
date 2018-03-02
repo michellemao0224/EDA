@@ -341,7 +341,90 @@ yourself to relationships between a main output feature and one of the
 supporting variables. Try to look at relationships between supporting variables
 as well.
 
+# From univariate analysis, I had a big picture about my dataset. In this section, I try to analyse the relationships between variables.  My main focus will still on:
+1. Customer Quality
+2. Bank Profitability
+3. Credit Risk
+
+> Customer Quality
+
+# Let us take a closer look at our borrowers.
+
 ```{r echo=FALSE, Bivariate_Plots}
+
+ggplot(aes(x = LoanOriginationQuarter, y = LoanOriginalAmount), 
+       data = subset(loan, !is.na(LoanOriginalAmount))) +
+  geom_point(stat = "summary", fun.y = mean, color = '#FF6EB4') +
+  scale_x_discrete(limits = c('Q1 2006','Q2 2006','Q3 2006','Q4 2006','Q1 2007','Q2 2007','Q3 2007','Q4 2007','Q1 2008','Q2 2008','Q3 2008','Q4 2008','Q2 2009','Q3 2009','Q4 2009','Q1 2010','Q2 2010','Q3 2010','Q4 2010','Q1 2011','Q2 2011','Q3 2011','Q4 2011','Q1 2012','Q2 2012','Q3 2012','Q4 2012','Q1 2013','Q2 2013','Q3 2013','Q4 2013','Q1 2014')) +
+  xlab('Quarter')  +
+  ylab('Loan Original Amount') +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
+
+```
+
+```{r echo=FALSE, Bivariate_Plots}
+
+ggplot(aes(x = IncomeRange, y = DebtToIncomeRatio), 
+       data = subset(loan, !is.na(DebtToIncomeRatio))) +
+  geom_boxplot(fill='#FF6EB4', color='#EEE685',
+               outlier.colour = '#FF6EB4', outlier.shape = 4, outlier.size = 0.8) +
+  scale_x_discrete(limits = c('$1-24,999', '$25,000-49,999', '$50,000-74,999', '$75,000-99,999', '$100,000+')) +
+  scale_y_continuous(trans = log10_trans()) +
+  xlab('Income Range')  +
+  ylab('Debt to Income Ratio') 
+
+```
+
+```{r echo=FALSE, Bivariate_Plots}
+
+m1 <- ggplot(aes(x = StatedMonthlyIncome, y = MonthlyLoanPayment / 100), data = loan) +
+  geom_line(color = '#FF6EB4') +
+  geom_smooth(color = '#EEE685') +
+  scale_y_continuous(trans = log10_trans()) +
+  xlim(0, 50000) +
+  ylim(0.01, 1.5)+
+  xlab('Monthly Income')  +
+  ylab('Monthly Loan Payment') 
+
+m2 <- ggplot(aes(x = StatedMonthlyIncome, y = DebtToIncomeRatio), data = loan) +
+  geom_line(color = '#FF6EB4') +
+  geom_smooth(color = '#EEE685') +
+  scale_y_continuous(trans = log10_trans()) +
+  xlim(0, 50000) +
+  ylim(0.01, 1.5)+
+  xlab('Monthly Income')  +
+  ylab('Debt To Income Ratio') 
+
+grid.arrange(m1, m2, nrow = 2)
+
+```
+
+```{r echo=FALSE, Bivariate_Plots}
+
+ggplot(aes(x = ProsperRating..Alpha., y = BorrowerState), data = loan) +
+  geom_point(aes(color = EmploymentStatus), size = 1.5) +
+  scale_x_discrete(limits = c('AA', 'A', 'B', 'C', 'D', 'E', 'HR')) +
+  xlab('Propser Rating')  +
+  ylab('State') 
+
+```
+
+```{r echo=FALSE, Bivariate_Plots}
+
+ggplot(aes(x = TotalTrades, y = BankcardUtilization), 
+       data = subset(loan, !is.na(TotalTrades))) +
+  geom_line(color = '#FF6EB4') +
+  geom_smooth(color = '#EEE685') +
+  scale_y_continuous(trans = log10_trans()) +
+  xlab('Total Trades')  +
+  ylab('Bank Card Utilization') 
+
+```
+
+> Bank Profitability
+
+```{r echo=FALSE, Bivariate_Plots}
+
 p1 <- ggplot(aes(x = ProsperRating..Alpha., y = BorrowerAPR), 
        data = loan) +
   geom_boxplot(aes(fill = ProsperRating..Alpha.)) +
@@ -364,9 +447,35 @@ p3 <- ggplot(aes(x = ProsperRating..Alpha., y = LenderYield),
   scale_x_discrete(limits = c('AA', 'A', 'B', 'C', 'D', 'E', 'HR'))
 
 grid.arrange(p1, p2, p3, nrow = 3)
+
 ```
 
 ```{r echo=FALSE, Bivariate_Plots}
+
+ggplot(aes(x = LoanOriginationQuarter, y = LP_InterestandFees), 
+       data = loan) +
+  geom_point(stat = "summary", fun.y = mean, color = '#FF6EB4') +
+  xlab('Quarter')  +
+  ylab('Interest and Fees') +
+  scale_x_discrete(limits = c('Q1 2006','Q2 2006','Q3 2006','Q4 2006','Q1 2007','Q2 2007','Q3 2007','Q4 2007','Q1 2008','Q2 2008','Q3 2008','Q4 2008','Q2 2009','Q3 2009','Q4 2009','Q1 2010','Q2 2010','Q3 2010','Q4 2010','Q1 2011','Q2 2011','Q3 2011','Q4 2011','Q1 2012','Q2 2012','Q3 2012','Q4 2012','Q1 2013','Q2 2013','Q3 2013','Q4 2013','Q1 2014')) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
+
+```
+
+```{r echo=FALSE, Bivariate_Plots}
+
+ggplot(aes(x = EstimatedReturn, y = EstimatedLoss), 
+       data = subset(loan, !is.na(EstimatedLoss))) +
+  geom_line(aes(color = ProsperRating..Alpha.)) +
+  xlab('Estimated Loss')  +
+  ylab('Estimated Return') 
+
+```
+
+> Credit Risk
+
+```{r echo=FALSE, Bivariate_Plots}
+
 b1 <- ggplot(aes(x = BorrowerAPR, y = CurrentDelinquencies), 
        data = subset(loan, !is.na(CurrentDelinquencies))) +
   geom_point(alpha = 1/10, position = position_jitter(h = 0), color = I('#D02090'), size = 0.8) +
@@ -386,9 +495,11 @@ b3 <- ggplot(aes(x = LenderYield, y = CurrentDelinquencies),
   ylab('Lender Yield') 
 
 grid.arrange(b1, b2, b3, nrow = 3)
+
 ``` 
 
 ```{r echo=FALSE, Bivariate_Plots}
+
 ggplot(aes(x = DebtToIncomeRatio, y = CurrentDelinquencies), 
        data = subset(loan, !is.na(CurrentDelinquencies))) +
   geom_point(color = I('#FF6EB4'), size = 0.8) +
@@ -398,87 +509,6 @@ ggplot(aes(x = DebtToIncomeRatio, y = CurrentDelinquencies),
 
 ```
 
-
-```{r echo=FALSE, Bivariate_Plots}
-ggplot(aes(x = LoanOriginationQuarter, y = LoanOriginalAmount), 
-       data = subset(loan, !is.na(LoanOriginalAmount))) +
-  geom_point(stat = "summary", fun.y = mean, color = '#FF6EB4') +
-  scale_x_discrete(limits = c('Q1 2006','Q2 2006','Q3 2006','Q4 2006','Q1 2007','Q2 2007','Q3 2007','Q4 2007','Q1 2008','Q2 2008','Q3 2008','Q4 2008','Q2 2009','Q3 2009','Q4 2009','Q1 2010','Q2 2010','Q3 2010','Q4 2010','Q1 2011','Q2 2011','Q3 2011','Q4 2011','Q1 2012','Q2 2012','Q3 2012','Q4 2012','Q1 2013','Q2 2013','Q3 2013','Q4 2013','Q1 2014')) +
-  xlab('Quarter')  +
-  ylab('Loan Original Amount') +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
-```
-
-```{r echo=FALSE, Bivariate_Plots}
-ggplot(aes(x = IncomeRange, y = DebtToIncomeRatio), 
-       data = subset(loan, !is.na(DebtToIncomeRatio))) +
-  geom_boxplot(fill='#FF6EB4', color='#EEE685',
-               outlier.colour = '#FF6EB4', outlier.shape = 4, outlier.size = 0.8) +
-  scale_x_discrete(limits = c('$1-24,999', '$25,000-49,999', '$50,000-74,999', '$75,000-99,999', '$100,000+')) +
-  scale_y_continuous(trans = log10_trans()) +
-  xlab('Income Range')  +
-  ylab('Debt to Income Ratio') 
-```
-
-```{r echo=FALSE, Bivariate_Plots}
-m1 <- ggplot(aes(x = StatedMonthlyIncome, y = MonthlyLoanPayment / 100), data = loan) +
-  geom_line(color = '#FF6EB4') +
-  geom_smooth(color = '#EEE685') +
-  scale_y_continuous(trans = log10_trans()) +
-  xlim(0, 50000) +
-  ylim(0.01, 1.5)+
-  xlab('Monthly Income')  +
-  ylab('Monthly Loan Payment') 
-
-m2 <- ggplot(aes(x = StatedMonthlyIncome, y = DebtToIncomeRatio), data = loan) +
-  geom_line(color = '#FF6EB4') +
-  geom_smooth(color = '#EEE685') +
-  scale_y_continuous(trans = log10_trans()) +
-  xlim(0, 50000) +
-  ylim(0.01, 1.5)+
-  xlab('Monthly Income')  +
-  ylab('Debt To Income Ratio') 
-
-grid.arrange(m1, m2, nrow = 2)
-```
-
-```{r echo=FALSE, Bivariate_Plots}
-ggplot(aes(x = ProsperRating..Alpha., y = BorrowerState), data = loan) +
-  geom_point(aes(color = EmploymentStatus), size = 1.5) +
-  scale_x_discrete(limits = c('AA', 'A', 'B', 'C', 'D', 'E', 'HR')) +
-  xlab('Propser Rating')  +
-  ylab('State') 
-```
-
-```{r echo=FALSE, Bivariate_Plots}
-ggplot(aes(x = LoanOriginationQuarter, y = LP_InterestandFees), 
-       data = loan) +
-  geom_point(stat = "summary", fun.y = mean, color = '#FF6EB4') +
-  xlab('Quarter')  +
-  ylab('Interest and Fees') +
-  scale_x_discrete(limits = c('Q1 2006','Q2 2006','Q3 2006','Q4 2006','Q1 2007','Q2 2007','Q3 2007','Q4 2007','Q1 2008','Q2 2008','Q3 2008','Q4 2008','Q2 2009','Q3 2009','Q4 2009','Q1 2010','Q2 2010','Q3 2010','Q4 2010','Q1 2011','Q2 2011','Q3 2011','Q4 2011','Q1 2012','Q2 2012','Q3 2012','Q4 2012','Q1 2013','Q2 2013','Q3 2013','Q4 2013','Q1 2014')) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
-
-```
-
-```{r echo=FALSE, Bivariate_Plots}
-ggplot(aes(x = EstimatedReturn, y = EstimatedLoss), 
-       data = subset(loan, !is.na(EstimatedLoss))) +
-  geom_line(aes(color = ProsperRating..Alpha.)) +
-  xlab('Estimated Loss')  +
-  ylab('Estimated Return') 
-
-```
-
-```{r echo=FALSE, Bivariate_Plots}
-ggplot(aes(x = TotalTrades, y = BankcardUtilization), 
-       data = subset(loan, !is.na(TotalTrades))) +
-  geom_line(color = '#FF6EB4') +
-  geom_smooth(color = '#EEE685') +
-  scale_y_continuous(trans = log10_trans()) +
-  xlab('Total Trades')  +
-  ylab('Bank Card Utilization') 
-```
 # Bivariate Analysis
 
 > **Tip**: As before, summarize what you found in your bivariate explorations
