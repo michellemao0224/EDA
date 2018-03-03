@@ -559,6 +559,7 @@ you plan on creating any mathematical models, this is the section where you
 will do that.
 
 ```{r echo=FALSE, Multivariate_Plots}
+
 loan.di_by_income_rate <- loan %>%
   filter(!is.na(ProsperRating..Alpha.)) %>%
   group_by(IncomeRange, ProsperRating..Alpha.) %>%
@@ -576,10 +577,10 @@ ggplot(aes(x = IncomeRange, y = median_BorrowerAPR),
   ylab('Median Borrower APR') +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
 
-
 ```
 
 ```{r echo=FALSE, Multivariate_Plots}
+
 loan.di_by_income_rate.wide <- dcast(loan.di_by_income_rate,
                                   IncomeRange ~ ProsperRating..Alpha.,
                                   value.val = 'median_BorrowerAPR')
@@ -683,9 +684,11 @@ pr6 <- ggplot(aes(x = IncomeRange, y = E / HR),
   theme(axis.text.x = element_text(angle = 30, hjust = 1))
 
 grid.arrange(pr1, pr2, pr3, pr4, pr5, pr6, ncol = 2)
+
 ```
 
 ```{r echo=FALSE, Multivariate_Plots}
+
 loan.amount_by_state_yield <- loan %>%
   filter(!is.na(BorrowerState)) %>%
   group_by(LoanOriginalAmount, BorrowerState) %>%
@@ -703,9 +706,11 @@ ggplot(aes(x = BorrowerState, y = median_LenderYield),
   xlab('Borrower State') +
   ylab('Median Lender Yield') +
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) 
+
 ```
 #  the super high-interest loans have boomed in California.
 ```{r echo=FALSE, Multivariate_Plots}
+
 loan.di_by_income_delienquncy <- loan %>%
   filter(!is.na(DebtToIncomeRatio)) %>%
   group_by(IncomeRange, DebtToIncomeRatio) %>%
@@ -724,6 +729,7 @@ ggplot(aes(x = IncomeRange, y = mean_CurrentDelinquencies),
   xlab('Income Range') +
   ylab('Average Current Delinquencies') +
   theme(axis.text.x = element_text(angle = 30, hjust = 1)) 
+
 ```
 
 # Multivariate Analysis
@@ -751,6 +757,7 @@ make sure you justify why you chose each plot by describing what it shows.
 
 ### Plot One
 ```{r echo=FALSE, Plot_One}
+
 loan.income_by_amount <- loan %>%
   filter(!is.na(IncomeRange)) %>%
   group_by(IncomeRange) %>%
@@ -776,6 +783,7 @@ Customer Quality
 
 ### Plot Two
 ```{r echo=FALSE, Plot_Two}
+
 loan.apr_by_income <- loan %>%
   filter(!is.na(LoanOriginalAmount)) %>%
   group_by(LoanOriginalAmount, ProsperRating..Alpha.) %>%
@@ -824,10 +832,11 @@ grid.arrange(pro1, pro2, pro3, ncol = 1)
 ```
 
 ### Description Two
-Bank Profitability
+Loan Provider Profitability
 
 ### Plot Three
 ```{r echo=FALSE, Plot_Three}
+
 loan.loss_by_rate_delienquncy <- loan %>%
   filter(!is.na(EstimatedLoss)) %>%
   group_by(ProsperRating..Alpha., EstimatedLoss) %>%
@@ -843,6 +852,7 @@ ggplot(aes(x = ProsperRating..Alpha., y = mean_CurrentDelinquencies),
   scale_x_discrete(limits = c('AA', 'A', 'B', 'C', 'D', 'E', 'HR')) +
   xlab('Prosper Rating') +
   ylab('Average Current Delinquencies') 
+
 ```
 
 ### Description Three
