@@ -170,7 +170,7 @@ ggplot(aes(x = reorder(Occupation, Occupation,
 
 ```
 
-# Apart from other occupations, professional occupies a large part of the count. Why bank and loan providers prefer to lend the loan to professional? The reason behind is they have stable and high income compared to others whilst they work on more techniqual job, which show the strong debt paying ability.
+# Apart from other occupations, professional occupies a large part of the count. Why loan providers prefer to lend the loan to professional? The reason behind is they have stable and high income compared to others whilst they work on more techniqual job, which show the strong debt paying ability.
 
 ```{r echo=FALSE, Univariate_Plots}
 
@@ -337,15 +337,9 @@ I also excluded several missing values in few variables, such as: DebtToIncomeRa
 
 # Bivariate Plots Section
 
-> **Tip**: Based on what you saw in the univariate plots, what relationships
-between variables might be interesting to look at in this section? Don't limit
-yourself to relationships between a main output feature and one of the
-supporting variables. Try to look at relationships between supporting variables
-as well.
-
 # From univariate analysis, I had a big picture about my dataset. In this section, I try to analyse the relationships between variables.  My main focus will still on:
 1. Customer Quality
-2. Bank Profitability
+2. Loan Provider Profitability
 3. Credit Risk
 
 > Customer Quality
@@ -441,6 +435,35 @@ If the total trades less than 50 times, then the bank card utilization is very e
 
 ```{r echo=FALSE, Bivariate_Plots}
 
+ggplot(aes(x = LoanOriginationQuarter, y = LP_InterestandFees), 
+       data = loan) +
+  geom_point(stat = "summary", fun.y = mean, color = '#FF6EB4') +
+  xlab('Quarter')  +
+  ylab('Interest and Fees') +
+  scale_x_discrete(limits = c('Q1 2006','Q2 2006','Q3 2006','Q4 2006','Q1 2007','Q2 2007','Q3 2007','Q4 2007','Q1 2008','Q2 2008','Q3 2008','Q4 2008','Q2 2009','Q3 2009','Q4 2009','Q1 2010','Q2 2010','Q3 2010','Q4 2010','Q1 2011','Q2 2011','Q3 2011','Q4 2011','Q1 2012','Q2 2012','Q3 2012','Q4 2012','Q1 2013','Q2 2013','Q3 2013','Q4 2013','Q1 2014')) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
+
+```
+
+# The interest and fees follow the same pattern as the loan offering amount in the begining but different in the end. Interest and fees slightly increased from the end of 2006 to 2007. They also have been affected by the subprime mortgage crisis from 2008 to 2009 and had a significantly drop.
+From 2010 to 2011, the interest and fees kept growing, but had a huge jump from 2012 to 2014. The decrease in loan interest rates in 2012 was affected by the bank start to provide more loan to borrowers. Loan providers lost a lot of their financial market in US.
+
+```{r echo=FALSE, Bivariate_Plots}
+
+ggplot(aes(x = EstimatedReturn, y = EstimatedLoss), 
+       data = subset(loan, !is.na(EstimatedLoss))) +
+  geom_line(aes(color = ProsperRating..Alpha.)) +
+  xlab('Estimated Loss')  +
+  ylab('Estimated Return') 
+
+```
+
+# In terms of prosper rating HR, the estimated loss and estimated return are in inverse proportion, because high risk credit has high change to loss the money and be hard to pay back. 
+
+> Credit Risk
+
+```{r echo=FALSE, Bivariate_Plots}
+
 p1 <- ggplot(aes(x = ProsperRating..Alpha., y = BorrowerAPR), 
        data = loan) +
   geom_boxplot(aes(fill = ProsperRating..Alpha.)) +
@@ -466,45 +489,23 @@ grid.arrange(p1, p2, p3, nrow = 3)
 
 ```
 
-```{r echo=FALSE, Bivariate_Plots}
-
-ggplot(aes(x = LoanOriginationQuarter, y = LP_InterestandFees), 
-       data = loan) +
-  geom_point(stat = "summary", fun.y = mean, color = '#FF6EB4') +
-  xlab('Quarter')  +
-  ylab('Interest and Fees') +
-  scale_x_discrete(limits = c('Q1 2006','Q2 2006','Q3 2006','Q4 2006','Q1 2007','Q2 2007','Q3 2007','Q4 2007','Q1 2008','Q2 2008','Q3 2008','Q4 2008','Q2 2009','Q3 2009','Q4 2009','Q1 2010','Q2 2010','Q3 2010','Q4 2010','Q1 2011','Q2 2011','Q3 2011','Q4 2011','Q1 2012','Q2 2012','Q3 2012','Q4 2012','Q1 2013','Q2 2013','Q3 2013','Q4 2013','Q1 2014')) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
-
-```
+# The loan provider adopts different strategies towards borrower who has different prosper rating. In general, the borrower APR, borrower rate and lender yield have similar pattern in terms of prosper rating. Obviously, the highest risk borrowers, the loan provider will charge highest borrower interest rate.
 
 ```{r echo=FALSE, Bivariate_Plots}
 
-ggplot(aes(x = EstimatedReturn, y = EstimatedLoss), 
-       data = subset(loan, !is.na(EstimatedLoss))) +
-  geom_line(aes(color = ProsperRating..Alpha.)) +
-  xlab('Estimated Loss')  +
-  ylab('Estimated Return') 
-
-```
-
-> Credit Risk
-
-```{r echo=FALSE, Bivariate_Plots}
-
-b1 <- ggplot(aes(x = BorrowerAPR, y = CurrentDelinquencies), 
+b1 <- ggplot(aes(x = BorrowerAPR * 100, y = CurrentDelinquencies / 100), 
        data = subset(loan, !is.na(CurrentDelinquencies))) +
   geom_point(alpha = 1/10, position = position_jitter(h = 0), color = I('#D02090'), size = 0.8) +
   xlab('Current Delinquencies')  +
   ylab('Borrower APR')
 
-b2 <- ggplot(aes(x = BorrowerRate, y = CurrentDelinquencies), 
+b2 <- ggplot(aes(x = BorrowerRate * 100, y = CurrentDelinquencies / 100), 
        data = subset(loan, !is.na(CurrentDelinquencies))) +
   geom_point(alpha = 1/10, position = position_jitter(h = 0), color = I('#D02090'), size = 0.8) +
   xlab('Current Delinquencies')  +
   ylab('Borrower Rate')
 
-b3 <- ggplot(aes(x = LenderYield, y = CurrentDelinquencies), 
+b3 <- ggplot(aes(x = LenderYield * 100, y = CurrentDelinquencies / 100), 
        data = subset(loan, !is.na(CurrentDelinquencies))) +
   geom_point(alpha = 1/10, position = position_jitter(h = 0), color = I('#D02090'), size = 0.8) +
   xlab('Current Delinquencies')  +
@@ -514,9 +515,14 @@ grid.arrange(b1, b2, b3, nrow = 3)
 
 ``` 
 
+# The current delinquencies in terms of borrower APR have a large distribution from 20 to 32.
+The current delinquencies in terms of borrower rate have a large distribution from 15 to 28, even reach to another peak in 35.
+The current delinquencies in terms of lender yield have a large distribution from 20 to 28, even reach to another peak in 35.
+However in general, the rate to cause the delienquencies are below 0.2.
+
 ```{r echo=FALSE, Bivariate_Plots}
 
-ggplot(aes(x = DebtToIncomeRatio, y = CurrentDelinquencies), 
+ggplot(aes(x = DebtToIncomeRatio * 10, y = CurrentDelinquencies / 100), 
        data = subset(loan, !is.na(CurrentDelinquencies))) +
   geom_point(color = I('#FF6EB4'), size = 0.8) +
   geom_smooth(method = 'lm', color = '#EEE685', size = 0.5) +
@@ -525,20 +531,23 @@ ggplot(aes(x = DebtToIncomeRatio, y = CurrentDelinquencies),
 
 ```
 
-# Bivariate Analysis
+# There is a large proposion that the curent delinquency below 10 has a debt to income ratio from 0 to 0.2.
+But it's strange to see the 100 times rdelinquencies have a low debt to income ratio.
 
-> **Tip**: As before, summarize what you found in your bivariate explorations
-here. Use the questions below to guide your discussion.
+# Bivariate Analysis
 
 ### Talk about some of the relationships you observed in this part of the \
 investigation. How did the feature(s) of interest vary with other features in \
 the dataset?
+Borrowers who have lower income would burden heavier debt, according to the debt to income ratio and income range plot.
 
 ### Did you observe any interesting relationships between the other features \
 (not the main feature(s) of interest)?
+It's interesting to see the loan original amount growed significantly from 2012 to 2014. 
+But on the contrary, the interest and fees went down dramatically from 2012 to 2014. Even they followed the same pattern as loan original amount before 2012.
 
 ### What was the strongest relationship you found?
-
+The prosper rating and borrower rates have the strongest relationship.
 
 # Multivariate Plots Section
 
