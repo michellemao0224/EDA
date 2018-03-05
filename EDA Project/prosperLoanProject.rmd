@@ -1,17 +1,6 @@
 Explore Loan Data by Lanmixue Mao (Michelle)
 ========================================================
 ```{r echo=FALSE, message=FALSE, warning=FALSE, packages}
-# Load all of the packages that you end up using in your analysis in this code
-# chunk.
-
-# Notice that the parameter "echo" was set to FALSE for this code chunk. This
-# prevents the code from displaying in the knitted HTML output. You should set
-# echo=FALSE for all code chunks in your file, unless it makes sense for your
-# report to show the code that generated a particular plot.
-
-# The other parameters for "message" and "warning" should also be set to FALSE
-# for other code chunks once you have verified that each plot comes out as you
-# want it to. This will clean up the flow of your report.
 
 library(ggplot2)
 library(reshape2)
@@ -90,7 +79,7 @@ This shows the difference about what the actual interest rate the borrower haven
 
 > Basic Loan Information
 
-# By looking at the frequent plot, the majority of borrowers (over 80,000) nomally prefer the term of 36 years. Around 25,000 borrowers choose the term of 60 years. Very few borrower like to lend the loan in very short term.
+By looking at the frequent plot, the majority of borrowers (over 80,000) nomally prefer the term of 36 years. Around 25,000 borrowers choose the term of 60 years. Very few borrower like to lend the loan in very short term.
 
 ```{r echo=FALSE, Univariate_Plots}
 # check which term borrower perfer to have the loan
@@ -103,15 +92,15 @@ qplot(x = Term, data = loan,
 
 ```
 
-# From the histogram, over 75000 people choose the loan term in 36 years, much higher than 60 years. However, we can see not many people choose the year of term in 12 years.
+From the histogram, over 75000 people choose the loan term in 36 years, much higher than 60 years. However, we can see not many people choose the year of term in 12 years.
 
-```{r echo=FALSE, Univariate_Plots}
+```{r echo=FALSE}
 summary(loan$Term)
 ```
 
-# We can see that people normally lend the loan around 4,000, also 10,000 and 15,000 are also the popular loan amount for borrowers. This frequency plot is positively skewed but appeared small peaks in every 5,000.
+We can see that people normally lend the loan around 4,000, also 10,000 and 15,000 are also the popular loan amount for borrowers. This frequency plot is positively skewed but appeared small peaks in every 5,000.
 
-```{r echo=FALSE, Univariate_Plots}
+```{r echo=FALSE}
 
 qplot(x = LoanOriginalAmount, data = loan,
       binwidth = 1000, 
@@ -125,9 +114,9 @@ qplot(x = LoanOriginalAmount, data = loan,
 
 > Basic Borrower Information
 
-# Now let's dive into basic borrower info!
+Now let's dive into basic borrower info!
 
-```{r echo=FALSE, Univariate_Plots}
+```{r echo=FALSE}
 
 qplot(x = IsBorrowerHomeowner, data = subset(loan, !is.na(ProsperScore)),
       xlab = 'Home Owner',
@@ -137,9 +126,9 @@ qplot(x = IsBorrowerHomeowner, data = subset(loan, !is.na(ProsperScore)),
 
 ```
 
-# Over half borrowers are home owner which shows the most of the loan borrower has strong debt paying ability.
+Over half borrowers are home owner which shows the most of the loan borrower has strong debt paying ability.
 
-```{r echo=FALSE, Univariate_Plots}
+```{r echo=FALSE}
 
 qplot(x = ProsperRating..Alpha., data = subset(loan, !is.na(ProsperScore)),
       xlab = 'Prosper Rating',
@@ -150,13 +139,13 @@ qplot(x = ProsperRating..Alpha., data = subset(loan, !is.na(ProsperScore)),
 
 ```
 
-# Prosper has seven loan grades called Prosper Ratings: AA, A, B, C, D, E and HR where AA is the lowest risk down to HR which actually stands for high risk. 
+Prosper has seven loan grades called Prosper Ratings: AA, A, B, C, D, E and HR where AA is the lowest risk down to HR which actually stands for high risk. 
 
 Except for empty values, the distribution of the ordinal variable has a bell-like shape. ‘C’ is the most frequent rating in our data and the highest (AA) and the lowest (HR) rating are less common comparing with other ratings in between. 
 
 Missing values are surprisingly high. After done the research, I found the Prosper Rating only exists after July 2009. Cross-validated from the loan original date, our data approved my assumption.
 
-```{r echo=FALSE, Univariate_Plots}
+```{r echo=FALSE}
 
 ggplot(aes(x = reorder(Occupation, Occupation, 
                        function(x) - length(x)),
@@ -170,9 +159,9 @@ ggplot(aes(x = reorder(Occupation, Occupation,
 
 ```
 
-# Apart from other occupations, professional occupies a large part of the count. Why loan providers prefer to lend the loan to professional? The reason behind is they have stable and high income compared to others whilst they work on more techniqual job, which show the strong debt paying ability.
+Apart from other occupations, professional occupies a large part of the count. Why loan providers prefer to lend the loan to professional? The reason behind is they have stable and high income compared to others whilst they work on more techniqual job, which show the strong debt paying ability.
 
-```{r echo=FALSE, Univariate_Plots}
+```{r echo=FALSE}
 
 ggplot(aes(x=reorder(IncomeRange,IncomeRange,
                      function(x)-length(x)),
@@ -186,9 +175,9 @@ ggplot(aes(x=reorder(IncomeRange,IncomeRange,
 
 ```
 
-# From income perspective, we can see most borrower's income range is $25,000 - 49,999, the second top is the income range $50,000 - 74,999. This can explain that most people who has an income range $25,000 - 49,999 is the new graduate or young professional, they have a very strong buying power to purchase their first home or car.
+From income perspective, we can see most borrower's income range is $25,000 - 49,999, the second top is the income range $50,000 - 74,999. This can explain that most people who has an income range $25,000 - 49,999 is the new graduate or young professional, they have a very strong buying power to purchase their first home or car.
 
-```{r echo=FALSE, Univariate_Plots}
+```{r echo=FALSE}
 
 loan$AnnualIncome <- loan$StatedMonthlyIncome * 12
 ggplot(aes(x = AnnualIncome), data = loan) +
@@ -202,9 +191,9 @@ ggplot(aes(x = AnnualIncome), data = loan) +
 
 ```
 
-# Further, we look at the anuual income of the borrower, this positive skewed frequency plot shows the result as same as the frequency income range plot and repeatively confirms the strong buying power coming from young professionals.  
+Further, we look at the anuual income of the borrower, this positive skewed frequency plot shows the result as same as the frequency income range plot and repeatively confirms the strong buying power coming from young professionals.  
 
-```{r echo=FALSE, Univariate_Plots}
+```{r echo=FALSE}
 
 ggplot(aes(x = BorrowerState), data = loan) +
   geom_histogram(aes(color = EmploymentStatus), stat="count", fill = 'white') +
@@ -215,11 +204,11 @@ ggplot(aes(x = BorrowerState), data = loan) +
 
 ```
 
-# We also care about which state has most borrower. The highest number of borrower is in CA, and it demonstrates that the California consumers have some of the higest levels of debt in the country. Moreover, the following Texas, New York and Florida can also be seen as a big loan market.
+We also care about which state has most borrower. The highest number of borrower is in CA, and it demonstrates that the California consumers have some of the higest levels of debt in the country. Moreover, the following Texas, New York and Florida can also be seen as a big loan market.
 
 > Credit History
 
-```{r echo=FALSE, Univariate_Plots}
+```{r echo=FALSE}
 
 ggplot(aes(x = CurrentDelinquencies), data = loan) +
   geom_histogram(fill= I('#E066FF'), color='white') +
@@ -231,9 +220,9 @@ ggplot(aes(x = CurrentDelinquencies), data = loan) +
 
 ```
 
-# Large proportion of borrowers only occurs one delinquency record. It normally because they forget to pay the annual fee for the credit card, or because they forget to repay one month loan.
+Large proportion of borrowers only occurs one delinquency record. It normally because they forget to pay the annual fee for the credit card, or because they forget to repay one month loan.
 
-```{r echo=FALSE, Univariate_Plots}
+```{r echo=FALSE}
 
 c1 <- ggplot(aes(x = DelinquenciesLast7Years), data = loan) +
   geom_histogram(fill= I('#E066FF'), color='white') +
@@ -255,9 +244,9 @@ grid.arrange(c1, c2, nrow = 2)
 
 ```
 
-# By checking the delinquency records last 7 years and public delinquency records last 10 years, it appears that having one delinquency records still the highest. But it's strange to see few borrowers have more than 30 times delinquencies.
+By checking the delinquency records last 7 years and public delinquency records last 10 years, it appears that having one delinquency records still the highest. But it's strange to see few borrowers have more than 30 times delinquencies.
 
-```{r echo=FALSE, Univariate_Plots}
+```{r echo=FALSE}
 
 ggplot(aes(x = BankcardUtilization), data = subset(loan, !is.na(BankcardUtilization))) +
   geom_histogram(fill= I('#E066FF'), color='white') +
@@ -269,11 +258,11 @@ ggplot(aes(x = BankcardUtilization), data = subset(loan, !is.na(BankcardUtilizat
 
 ```
 
-# Then how often the borrower use their bank card?
+Then how often the borrower use their bank card?
 We can see the majority bank card utilization frequency is over 0.5 and reach the peak at the 0.9.
 This can fully demonstrate how much borrower adore the bank card.
 
-```{r echo=FALSE, Univariate_Plots}
+```{r echo=FALSE}
 
 ggplot(aes(x = TradesNeverDelinquent..percentage.), 
        data = subset(loan, !is.na(TradesNeverDelinquent..percentage.))) +
@@ -286,9 +275,9 @@ ggplot(aes(x = TradesNeverDelinquent..percentage.),
 
 ```
 
-# From the records of never delinquent trade, we can tell from this negative skewed histogram that most borrowers keep themselves having a good credit rating and value the lend money. Only few of them has a percentage below 0.50 that we can base on this record to select our loan borrowers and decide whether we want to deal with loan repayment with them or not.
+From the records of never delinquent trade, we can tell from this negative skewed histogram that most borrowers keep themselves having a good credit rating and value the lend money. Only few of them has a percentage below 0.50 that we can base on this record to select our loan borrowers and decide whether we want to deal with loan repayment with them or not.
 
-```{r echo=FALSE, Univariate_Plots}
+```{r echo=FALSE}
 
 ggplot(aes(x = DebtToIncomeRatio), data = subset(loan, !is.na( DebtToIncomeRatio))) +
   geom_histogram(fill= I('#E066FF'), color='white') +
@@ -300,13 +289,9 @@ ggplot(aes(x = DebtToIncomeRatio), data = subset(loan, !is.na( DebtToIncomeRatio
 
 ```
 
-# We also want to know how much debt burden that our borrower carry. The distribution of this frequency plot shows that the majority of borrower has a debt and income ratio less than 0.40. The ratio reaches the peak at 0.20. The borrowers's income can fully cover their debts, and it also obey the rule of "ratio of debt and income should 0.85 or 0.8".
+We also want to know how much debt burden that our borrower carry. The distribution of this frequency plot shows that the majority of borrower has a debt and income ratio less than 0.40. The ratio reaches the peak at 0.20. The borrowers's income can fully cover their debts, and it also obey the rule of "ratio of debt and income should 0.85 or 0.8".
 
 # Univariate Analysis
-
-> **Tip**: Now that you've completed your univariate explorations, it's time to
-reflect on and summarize what you've found. Use the questions below to help you
-gather your observations and add your own if you have other thoughts!
 
 ### What is the structure of your dataset?
 The structure of the dataset covers the different loan interest rates, borrower's employment status and income, liability ratio, delinquency records, etc.
@@ -337,14 +322,14 @@ I also excluded several missing values in few variables, such as: DebtToIncomeRa
 
 # Bivariate Plots Section
 
-# From univariate analysis, I had a big picture about my dataset. In this section, I try to analyse the relationships between variables.  My main focus will still on:
-1. Customer Quality
-2. Loan Provider Profitability
-3. Credit Risk
+From univariate analysis, I had a big picture about my dataset. In this section, I try to analyse the relationships between variables.  My main focus will still on:
+- Customer Quality
+- Loan Provider Profitability
+- Credit Risk
 
 > Customer Quality
 
-# Let us take a closer look at our borrowers.
+Let us take a closer look at our borrowers.
 
 ```{r echo=FALSE, Bivariate_Plots}
 
@@ -358,10 +343,10 @@ ggplot(aes(x = LoanOriginationQuarter, y = LoanOriginalAmount),
 
 ```
 
-# Loan amount slightly increased from the end of 2006 to 2007. However, as the subprime mortgage crisis spreaded to the whole nation and worldwide exploded, the loan amount jumped dramatically from 2008 to 2009.
+Loan amount slightly increased from the end of 2006 to 2007. However, as the subprime mortgage crisis spreaded to the whole nation and worldwide exploded, the loan amount jumped dramatically from 2008 to 2009.
 Nevertheless, since 2010, the loan amount has an exponential growth. More and more people need cash, and the financial market is very active.
 
-```{r echo=FALSE, Bivariate_Plots}
+```{r echo=FALSE}
 
 ggplot(aes(x = IncomeRange, y = DebtToIncomeRatio), 
        data = subset(loan, !is.na(DebtToIncomeRatio))) +
@@ -374,9 +359,9 @@ ggplot(aes(x = IncomeRange, y = DebtToIncomeRatio),
 
 ```
 
-# From above plot we can see that people with less income would have heavier mortgage burden. The average debt to income ratio of the $1-24,999 group is slightly higher than $25,000 - 49,999 group. But it's worth to note that the outliers of the $1- 24,999 group are much more than the others, and it's strange to see some borrowers have debt to income ratio in 10.0.
+From above plot we can see that people with less income would have heavier mortgage burden. The average debt to income ratio of the $1-24,999 group is slightly higher than $25,000 - 49,999 group. But it's worth to note that the outliers of the $1- 24,999 group are much more than the others, and it's strange to see some borrowers have debt to income ratio in 10.0.
 
-```{r echo=FALSE, Bivariate_Plots}
+```{r echo=FALSE}
 
 m1 <- ggplot(aes(x = StatedMonthlyIncome, y = MonthlyLoanPayment / 100), data = loan) +
   geom_line(color = '#FF6EB4') +
@@ -400,9 +385,9 @@ grid.arrange(m1, m2, nrow = 2)
 
 ```
 
-# Compared mmonthly loan payment and debt to income ration in terms of monthly income, monthly loan payment is heavily concentrated on monthly income range $0 to $ 10000. However, debt to income ratio shows a positive skewed distribution.
+Compared mmonthly loan payment and debt to income ration in terms of monthly income, monthly loan payment is heavily concentrated on monthly income range $0 to $ 10000. However, debt to income ratio shows a positive skewed distribution.
 
-```{r echo=FALSE, Bivariate_Plots}
+```{r echo=FALSE}
 
 ggplot(aes(x = ProsperRating..Alpha., y = BorrowerState), data = loan) +
   geom_point(aes(color = EmploymentStatus), size = 1.5) +
@@ -412,11 +397,11 @@ ggplot(aes(x = ProsperRating..Alpha., y = BorrowerState), data = loan) +
 
 ```
 
-# This plot can show us in each state which employment status has what prosper rating. 
+This plot can show us in each state which employment status has what prosper rating. 
 The ND and IA have missing value. 
 Self-employed borrower in MA and OR has the worst propser rating (HR) and highest risk. On the contrary, self-employed borrower in AL has the best prosper rating (AA).
 
-```{r echo=FALSE, Bivariate_Plots}
+```{r echo=FALSE}
 
 ggplot(aes(x = TotalTrades, y = BankcardUtilization), 
        data = subset(loan, !is.na(TotalTrades))) +
@@ -428,12 +413,12 @@ ggplot(aes(x = TotalTrades, y = BankcardUtilization),
 
 ```
 
-# From the line plot, as the total trades grow, the average bank card utilization varies from 0.5 to 0.75 then back to 0.6.
+From the line plot, as the total trades grow, the average bank card utilization varies from 0.5 to 0.75 then back to 0.6.
 If the total trades less than 50 times, then the bank card utilization is very efficient, which means the borrower is more likely to use the bank card to do transaction.
 
 > Bank Profitability
 
-```{r echo=FALSE, Bivariate_Plots}
+```{r echo=FALSE}
 
 ggplot(aes(x = LoanOriginationQuarter, y = LP_InterestandFees), 
        data = loan) +
@@ -445,10 +430,10 @@ ggplot(aes(x = LoanOriginationQuarter, y = LP_InterestandFees),
 
 ```
 
-# The interest and fees follow the same pattern as the loan offering amount in the begining but different in the end. Interest and fees slightly increased from the end of 2006 to 2007. They also have been affected by the subprime mortgage crisis from 2008 to 2009 and had a significantly drop.
+The interest and fees follow the same pattern as the loan offering amount in the begining but different in the end. Interest and fees slightly increased from the end of 2006 to 2007. They also have been affected by the subprime mortgage crisis from 2008 to 2009 and had a significantly drop.
 From 2010 to 2011, the interest and fees kept growing, but had a huge jump from 2012 to 2014. The decrease in loan interest rates in 2012 was affected by the bank start to provide more loan to borrowers. Loan providers lost a lot of their financial market in US.
 
-```{r echo=FALSE, Bivariate_Plots}
+```{r echo=FALSE}
 
 ggplot(aes(x = EstimatedReturn, y = EstimatedLoss), 
        data = subset(loan, !is.na(EstimatedLoss))) +
@@ -458,11 +443,11 @@ ggplot(aes(x = EstimatedReturn, y = EstimatedLoss),
 
 ```
 
-# In terms of prosper rating HR, the estimated loss and estimated return are in inverse proportion, because high risk credit has high change to loss the money and be hard to pay back. 
+In terms of prosper rating HR, the estimated loss and estimated return are in inverse proportion, because high risk credit has high change to loss the money and be hard to pay back. 
 
 > Credit Risk
 
-```{r echo=FALSE, Bivariate_Plots}
+```{r echo=FALSE}
 
 p1 <- ggplot(aes(x = ProsperRating..Alpha., y = BorrowerAPR), 
        data = loan) +
@@ -489,9 +474,9 @@ grid.arrange(p1, p2, p3, nrow = 3)
 
 ```
 
-# The loan provider adopts different strategies towards borrower who has different prosper rating. In general, the borrower APR, borrower rate and lender yield have similar pattern in terms of prosper rating. Obviously, the highest risk borrowers, the loan provider will charge highest borrower interest rate.
+The loan provider adopts different strategies towards borrower who has different prosper rating. In general, the borrower APR, borrower rate and lender yield have similar pattern in terms of prosper rating. Obviously, the highest risk borrowers, the loan provider will charge highest borrower interest rate.
 
-```{r echo=FALSE, Bivariate_Plots}
+```{r echo=FALSE}
 
 b1 <- ggplot(aes(x = BorrowerAPR * 100, y = CurrentDelinquencies / 100), 
        data = subset(loan, !is.na(CurrentDelinquencies))) +
@@ -515,12 +500,12 @@ grid.arrange(b1, b2, b3, nrow = 3)
 
 ``` 
 
-# The current delinquencies in terms of borrower APR have a large distribution from 20 to 32.
+The current delinquencies in terms of borrower APR have a large distribution from 20 to 32.
 The current delinquencies in terms of borrower rate have a large distribution from 15 to 28, even reach to another peak in 35.
 The current delinquencies in terms of lender yield have a large distribution from 20 to 28, even reach to another peak in 35.
 However in general, the rate to cause the delienquencies are below 0.2.
 
-```{r echo=FALSE, Bivariate_Plots}
+```{r echo=FALSE}
 
 ggplot(aes(x = DebtToIncomeRatio * 10, y = CurrentDelinquencies / 100), 
        data = subset(loan, !is.na(CurrentDelinquencies))) +
@@ -531,7 +516,7 @@ ggplot(aes(x = DebtToIncomeRatio * 10, y = CurrentDelinquencies / 100),
 
 ```
 
-# There is a large proposion that the curent delinquency below 10 has a debt to income ratio from 0 to 0.2.
+There is a large proposion that the curent delinquency below 10 has a debt to income ratio from 0 to 0.2.
 But it's strange to see the 100 times rdelinquencies have a low debt to income ratio.
 
 # Bivariate Analysis
@@ -551,12 +536,7 @@ The prosper rating and borrower rates have the strongest relationship.
 
 # Multivariate Plots Section
 
-> **Tip**: Now it's time to put everything together. Based on what you found in
-the bivariate plots section, create a few multivariate plots to investigate
-more complex interactions between variables. Make sure that the plots that you
-create here are justified by the plots you explored in the previous section. If
-you plan on creating any mathematical models, this is the section where you
-will do that.
+In this Section, I will analyse the client quality, loan provider profitability and credit risk together. In each plot, we can have an overall profile regarding to the three aspects.
 
 ```{r echo=FALSE, Multivariate_Plots}
 
@@ -570,16 +550,166 @@ loan.di_by_income_rate <- loan %>%
   arrange(IncomeRange)
 head(loan.di_by_income_rate, 50)
 
-ggplot(aes(x = IncomeRange, y = median_BorrowerAPR),
+ggplot(aes(x = IncomeRange, y = mean_BorrowerAPR),
        data = subset(loan.di_by_income_rate, !is.na(IncomeRange) & IncomeRange != 'Not displayed')) +
   geom_point(aes(color = ProsperRating..Alpha.)) +
   xlab('Income Range') +
-  ylab('Median Borrower APR') +
+  ylab('Average Borrower APR') +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
 
 ```
 
-```{r echo=FALSE, Multivariate_Plots}
+As the income increases, the HR prosper rating has the higest borrower APR, in contrary the AA prosper rating has the lowest borrower APR. However, it's interesting to see borrower rate doesn't always go up while income increase. For example, borrower APR of the E prosper rating goes down as the income grow. But if the borrower is not employed, the borrower APR is always higher than any other income range.
+
+```{r echo=FALSE}
+
+loan.apr_by_income <- loan %>%
+  filter(!is.na(LoanOriginalAmount)) %>%
+  group_by(LoanOriginalAmount, ProsperRating..Alpha.) %>%
+  summarise(mean_BorrowerAPR = mean(BorrowerAPR),
+            n = n()) %>%
+  ungroup() %>%
+  arrange(LoanOriginalAmount)
+head(loan.apr_by_income, 50)
+
+pro1 <- ggplot(aes(x = LoanOriginalAmount, y = mean_BorrowerAPR),
+       data = subset(loan.apr_by_income, !is.na(mean_BorrowerAPR))) +
+  geom_point(aes(color = ProsperRating..Alpha.)) +
+  xlab('Loan Original Amount') +
+  ylab('Average Borrower APR') 
+
+loan.rate_by_income <- loan %>%
+  filter(!is.na(LoanOriginalAmount)) %>%
+  group_by(LoanOriginalAmount, ProsperRating..Alpha.) %>%
+  summarise(mean_BorrowerRate = mean(BorrowerRate),
+            n = n()) %>%
+  ungroup() %>%
+  arrange(LoanOriginalAmount)
+
+pro2 <- ggplot(aes(x = LoanOriginalAmount, y = mean_BorrowerRate),
+       data = subset(loan.rate_by_income, !is.na(mean_BorrowerRate))) +
+  geom_point(aes(color = ProsperRating..Alpha.)) +
+  xlab('Loan Original Amount') +
+  ylab('Average Borrower Rate')
+
+loan.yield_by_income <- loan %>%
+  filter(!is.na(LoanOriginalAmount)) %>%
+  group_by(LoanOriginalAmount, ProsperRating..Alpha.) %>%
+  summarise(mean_LenderYield = mean(LenderYield),
+            n = n()) %>%
+  ungroup() %>%
+  arrange(LoanOriginalAmount)
+
+pro3 <- ggplot(aes(x = LoanOriginalAmount, y = mean_LenderYield),
+       data = subset(loan.yield_by_income, !is.na(mean_LenderYield))) +
+  geom_point(aes(color = ProsperRating..Alpha.)) +
+  xlab('Loan Original Amount') +
+  ylab('Average Lender Yield') 
+
+grid.arrange(pro1, pro2, pro3, ncol = 1)
+
+
+```
+
+The loan amount provided to different prosper rating customer with different borrower rates is similar. Most of loan amount concentrates on $1000 - $25,000. 
+
+```{r echo=FALSE}
+
+loan.amount_by_state_yield <- loan %>%
+  filter(!is.na(BorrowerState)) %>%
+  group_by(LoanOriginalAmount, BorrowerState) %>%
+  summarise(mean_LenderYield = mean(LenderYield),
+            n = n()) %>%
+  ungroup() %>%
+  arrange(LoanOriginalAmount)
+head(loan.amount_by_state_yield, 50)
+
+ggplot(aes(x = BorrowerState, y = mean_LenderYield),
+       data = subset(loan.amount_by_state_yield, !is.na(BorrowerState))) +
+  geom_point(aes(color = LoanOriginalAmount), size = 1.5) +
+  ylim(0, 0.35) +
+  xlab('Borrower State') +
+  ylab('Average Lender Yield') +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) 
+
+```
+
+The super high-interest loans have boomed in CA. We also can spot on few other states have very high interest rates and loan amount, such as FL, OR, NY, DC, MA.
+
+```{r echo=FALSE}
+
+loan.di_by_income_delienquncy <- loan %>%
+  filter(!is.na(DebtToIncomeRatio)) %>%
+  group_by(IncomeRange, DebtToIncomeRatio) %>%
+  summarise(mean_CurrentDelinquencies = mean(CurrentDelinquencies),
+            n = n()) %>%
+  ungroup() %>%
+  arrange(IncomeRange)
+head(loan.di_by_income_delienquncy, 50)
+
+ggplot(aes(x = IncomeRange, y = mean_CurrentDelinquencies),
+       data = subset(loan.di_by_income_delienquncy, !is.na(IncomeRange) & IncomeRange != 'Not displayed')) +
+  geom_point(aes(color = DebtToIncomeRatio), size = 1.5) +
+  scale_y_continuous(trans = log10_trans()) +
+  scale_x_discrete(
+    limits = c('Not employed', '$1-24,999', '$25,000-49,999', '$50,000-74,999', '$75,000-99,999', '$100,000+')) +
+  xlab('Income Range') +
+  ylab('Average Current Delinquencies') +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1)) 
+
+```
+
+The average current delinquencies are very high amoung the $1-24,999 and $50,000-74,999 income group. The reason behind is these groups have more borrowers and vert high loan amount. But the $100,000+ income group is easier to occur delinquency, because this group uses the loan money to deal with block trade.
+
+# Multivariate Analysis
+
+### Talk about some of the relationships you observed in this part of the \
+investigation. Were there features that strengthened each other in terms of \
+looking at your feature(s) of interest?
+
+I am glad to find the ralationships between interest rate and borrower who has different income group and prosper rating. It's meaningful because it gives loan provider some ideas about how to set price of the interest rate in terms of different customer quality.
+
+### Were there any interesting or surprising interactions between features?
+I found it is surprising to see borrower who is income is above $100,000 appears to be linked to high levels of delinquent. Before I think they have better capital strength that would not easily to have any delinquency.
+
+------
+
+# Final Plots and Summary
+
+### Plot One
+```{r echo=FALSE, Plot_One}
+
+loan.income_by_amount <- loan %>%
+  filter(!is.na(IncomeRange)) %>%
+  group_by(IncomeRange) %>%
+  summarise(mean_LoanOriginalAmount = mean(LoanOriginalAmount),
+            n = n()) %>%
+  ungroup() %>%
+  arrange(IncomeRange)
+head(loan.income_by_amount, 50)
+
+ggplot(aes(x = IncomeRange, y = mean_LoanOriginalAmount),
+       data = subset(loan.income_by_amount, !is.na(IncomeRange))) +
+  geom_point(color = '#B22222', size = 2) +
+  scale_x_discrete(
+    limits = c('Not employed', '$1-24,999', '$25,000-49,999', '$50,000-74,999', '$75,000-99,999', '$100,000+')) +
+  xlab('Income Range') +
+  ylab('Average Loan Original Amount') +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1)) 
+
+```
+
+### Description One
+Customer Quality
+
+This plot shows the customer quality from two aspects: average loan original amount and income range. 
+Loan provider is interested in how much loan amount they can offer to customer and bacially this customer is in which income range.
+
+From this plot, we can see $1-24,999 income group is more likely to lend loan around $4300; $25,000-49,999 income group is more likely to lend loan around $6100; $50,000-74,999 income group is more likely to lend loan around $8800; $75,000-99,999 income group is more likely to lend loan around $11400; $100,000+ income group is more likely to lend loan around $13000.
+
+### Plot Two
+
+```{r echo=FALSE, Plot_Two}
 
 loan.di_by_income_rate.wide <- dcast(loan.di_by_income_rate,
                                   IncomeRange ~ ProsperRating..Alpha.,
@@ -687,152 +817,14 @@ grid.arrange(pr1, pr2, pr3, pr4, pr5, pr6, ncol = 2)
 
 ```
 
-```{r echo=FALSE, Multivariate_Plots}
-
-loan.amount_by_state_yield <- loan %>%
-  filter(!is.na(BorrowerState)) %>%
-  group_by(LoanOriginalAmount, BorrowerState) %>%
-  summarise(mean_LenderYield = mean(LenderYield),
-            median_LenderYield = median(LenderYield),
-            n = n()) %>%
-  ungroup() %>%
-  arrange(LoanOriginalAmount)
-head(loan.amount_by_state_yield, 50)
-
-ggplot(aes(x = BorrowerState, y = median_LenderYield),
-       data = subset(loan.amount_by_state_yield, !is.na(BorrowerState))) +
-  geom_point(aes(color = LoanOriginalAmount), size = 1.5) +
-  ylim(0, 0.35) +
-  xlab('Borrower State') +
-  ylab('Median Lender Yield') +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1)) 
-
-```
-#  the super high-interest loans have boomed in California.
-```{r echo=FALSE, Multivariate_Plots}
-
-loan.di_by_income_delienquncy <- loan %>%
-  filter(!is.na(DebtToIncomeRatio)) %>%
-  group_by(IncomeRange, DebtToIncomeRatio) %>%
-  summarise(mean_CurrentDelinquencies = mean(CurrentDelinquencies),
-            n = n()) %>%
-  ungroup() %>%
-  arrange(IncomeRange)
-head(loan.di_by_income_delienquncy, 50)
-
-ggplot(aes(x = IncomeRange, y = mean_CurrentDelinquencies),
-       data = subset(loan.di_by_income_delienquncy, !is.na(IncomeRange) & IncomeRange != 'Not displayed')) +
-  geom_point(aes(color = DebtToIncomeRatio), size = 1.5) +
-  scale_y_continuous(trans = log10_trans()) +
-  scale_x_discrete(
-    limits = c('Not employed', '$1-24,999', '$25,000-49,999', '$50,000-74,999', '$75,000-99,999', '$100,000+')) +
-  xlab('Income Range') +
-  ylab('Average Current Delinquencies') +
-  theme(axis.text.x = element_text(angle = 30, hjust = 1)) 
-
-```
-
-# Multivariate Analysis
-
-### Talk about some of the relationships you observed in this part of the \
-investigation. Were there features that strengthened each other in terms of \
-looking at your feature(s) of interest?
-
-### Were there any interesting or surprising interactions between features?
-
-### OPTIONAL: Did you create any models with your dataset? Discuss the \
-strengths and limitations of your model.
-
-------
-
-# Final Plots and Summary
-
-> **Tip**: You've done a lot of exploration and have built up an understanding
-of the structure of and relationships between the variables in your dataset.
-Here, you will select three plots from all of your previous exploration to
-present here as a summary of some of your most interesting findings. Make sure
-that you have refined your selected plots for good titling, axis labels (with
-units), and good aesthetic choices (e.g. color, transparency). After each plot,
-make sure you justify why you chose each plot by describing what it shows.
-
-### Plot One
-```{r echo=FALSE, Plot_One}
-
-loan.income_by_amount <- loan %>%
-  filter(!is.na(IncomeRange)) %>%
-  group_by(IncomeRange) %>%
-  summarise(mean_LoanOriginalAmount = mean(LoanOriginalAmount),
-            n = n()) %>%
-  ungroup() %>%
-  arrange(IncomeRange)
-head(loan.income_by_amount, 50)
-
-ggplot(aes(x = IncomeRange, y = mean_LoanOriginalAmount),
-       data = subset(loan.income_by_amount, !is.na(IncomeRange))) +
-  geom_point(color = '#B22222', size = 2) +
-  scale_x_discrete(
-    limits = c('Not employed', '$1-24,999', '$25,000-49,999', '$50,000-74,999', '$75,000-99,999', '$100,000+')) +
-  xlab('Income Range') +
-  ylab('Average Loan Original Amount') +
-  theme(axis.text.x = element_text(angle = 30, hjust = 1)) 
-
-```
-
-### Description One
-Customer Quality
-
-### Plot Two
-```{r echo=FALSE, Plot_Two}
-
-loan.apr_by_income <- loan %>%
-  filter(!is.na(LoanOriginalAmount)) %>%
-  group_by(LoanOriginalAmount, ProsperRating..Alpha.) %>%
-  summarise(mean_BorrowerAPR = mean(BorrowerAPR),
-            n = n()) %>%
-  ungroup() %>%
-  arrange(LoanOriginalAmount)
-head(loan.apr_by_income, 50)
-
-pro1 <- ggplot(aes(x = LoanOriginalAmount, y = mean_BorrowerAPR),
-       data = subset(loan.apr_by_income, !is.na(mean_BorrowerAPR))) +
-  geom_point(aes(color = ProsperRating..Alpha.)) +
-  xlab('Loan Original Amount') +
-  ylab('Average Borrower APR') 
-
-loan.rate_by_income <- loan %>%
-  filter(!is.na(LoanOriginalAmount)) %>%
-  group_by(LoanOriginalAmount, ProsperRating..Alpha.) %>%
-  summarise(mean_BorrowerRate = mean(BorrowerRate),
-            n = n()) %>%
-  ungroup() %>%
-  arrange(LoanOriginalAmount)
-
-pro2 <- ggplot(aes(x = LoanOriginalAmount, y = mean_BorrowerRate),
-       data = subset(loan.rate_by_income, !is.na(mean_BorrowerRate))) +
-  geom_point(aes(color = ProsperRating..Alpha.)) +
-  xlab('Loan Original Amount') +
-  ylab('Average Borrower Rate')
-
-loan.yield_by_income <- loan %>%
-  filter(!is.na(LoanOriginalAmount)) %>%
-  group_by(LoanOriginalAmount, ProsperRating..Alpha.) %>%
-  summarise(mean_LenderYield = mean(LenderYield),
-            n = n()) %>%
-  ungroup() %>%
-  arrange(LoanOriginalAmount)
-
-pro3 <- ggplot(aes(x = LoanOriginalAmount, y = mean_LenderYield),
-       data = subset(loan.yield_by_income, !is.na(mean_LenderYield))) +
-  geom_point(aes(color = ProsperRating..Alpha.)) +
-  xlab('Loan Original Amount') +
-  ylab('Average Lender Yield') 
-
-grid.arrange(pro1, pro2, pro3, ncol = 1)
-
-```
-
 ### Description Two
 Loan Provider Profitability
+
+This time I want to know how different between two similar prosper ratings. So I compared each pair of prosper ratings, such as: AA and A, A and B, etc. We can see the prosper rating ratio increases from 0.65 to 0.95. Especially, there is a big gap from AA/A to A/B.
+
+In terms of the variety of income range, A/B and D/E ratio go up with the income range. B/C ratio goes up with the income range but significantly drop in the end. C/D and E/HR ratio go down with the income range. AA/A ratio almost stays the same.
+
+Based on this diagram, we can find the perfect borrower APR for each borrower with differet income and prosper rating. This is also important for loan providers to measure their profitability.
 
 ### Plot Three
 ```{r echo=FALSE, Plot_Three}
@@ -846,7 +838,7 @@ loan.loss_by_rate_delienquncy <- loan %>%
   arrange(ProsperRating..Alpha.)
 head(loan.loss_by_rate_delienquncy, 50)
 
-ggplot(aes(x = ProsperRating..Alpha., y = mean_CurrentDelinquencies),
+ggplot(aes(x = ProsperRating..Alpha., y = mean_CurrentDelinquencies * 10),
        data = subset(loan.loss_by_rate_delienquncy, !is.na(ProsperRating..Alpha.))) +
   geom_point(aes(color = EstimatedLoss), size = 1.5) +
   scale_x_discrete(limits = c('AA', 'A', 'B', 'C', 'D', 'E', 'HR')) +
@@ -857,14 +849,14 @@ ggplot(aes(x = ProsperRating..Alpha., y = mean_CurrentDelinquencies),
 
 ### Description Three
 Credit Risk
+The estimated loss of AA prosper rating has the lowest delinquencies. 
+The distribution of prosper rating B, C, E and HR is scattered distribution. 
+The prosper rating HR has the highest estimated loss above 0.3 and the highest average current delinquencies over 24 times. 
+This plot can show the credit risk and profit loss regarding different prosper rating of borrower.
 ------
 
 # Reflection
 
-> **Tip**: Here's the final step! Reflect on the exploration you performed and
-the insights you found. What were some of the struggles that you went through?
-What went well? What was surprising? Make sure you include an insight into
-future work that could be done with the dataset.
+In this report, I am glad to find the relationships between prosper rating and interest rate, delinquency and income range, delinquency and debt to income ratio, income range and loan amount.
 
-> **Tip**: Don't forget to remove this, and the other **Tip** sections before
-saving your final work and knitting the final report!
+In the future, I am keen to explore how to set a certain interest rate on different quality customers.  
