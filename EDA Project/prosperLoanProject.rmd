@@ -79,16 +79,15 @@ This shows the difference about what the actual interest rate the borrower haven
 
 > Basic Loan Information
 
-By looking at the frequent plot, the majority of borrowers (over 80,000) nomally prefer the term of 36 years. Around 25,000 borrowers choose the term of 60 years. Very few borrower like to lend the loan in very short term.
+By looking at the frequent plot, the majority of borrower APR rate (nearly 10,000) is around 0.17. The second large borrower APR rate is around 0.2. Most of the borrower APR rate is in the range of 0.12 to 0.35.
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, Univariate_Plots}
-# check which term borrower perfer to have the loan
-qplot(x = Term, data = loan,
-      xlab = 'Term (years)',
-      ylab = 'Loan Count',
-      main = 'How long borrower lend the loan',
-      binwidth = 12, fill= I('#FF6EB4')) +
-  scale_x_continuous(lim = c(0, 72), breaks = seq(0, 72, 12))
+
+qplot(x = BorrowerAPR, data = loan,
+      xlab = 'Borrower APR',
+      ylab = 'Count', colour = I('#FCFCFC'), 
+      fill= I('#FF6EB4')) +
+   scale_x_continuous(breaks = seq(0.05, 0.45, 0.05))
 
 ```
 
@@ -106,7 +105,6 @@ qplot(x = LoanOriginalAmount, data = loan,
       binwidth = 1000, 
       xlab = 'Loan Original Amount',
       ylab = 'Count',
-      main = 'How much loan borrower lend',
       colour = I('#FCFCFC'), fill= I('#FF6EB4')) +
   scale_x_continuous(breaks = seq(0, 35000, 5000))
 
@@ -118,26 +116,31 @@ Now let's dive into basic borrower info!
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 
-qplot(x = IsBorrowerHomeowner, 
-      data = subset(loan, !is.na(ProsperScore)),
-      xlab = 'Home Owner',
-      ylab = 'Count',
-      main = 'Number of Home Owner Borrower') +
-  geom_histogram(stat='count', fill= I('#FF82AB'), color='white')
+ggplot(aes(x = reorder(EmploymentStatus, EmploymentStatus, 
+                       function(x) - length(x)),
+           fill = I("#FF82AB")), 
+       data = subset(loan, !is.na(EmploymentStatus))) +
+  geom_bar() +
+  xlab('Employment Status') +
+  scale_x_discrete(limits = c('Employed', 'Full-time', 
+                              'Self-employed', 'Not available', 
+                              'Other', 'Part-time',
+                              'Not employed', 'Retired'))
 
 ```
 
-Over half borrowers are home owner which shows the most of the loan borrower has strong debt paying ability.
+Over 60,000 borrowers are employed, full-time followed behind as the second. Retired borrowers have the the least numbers.
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 
 qplot(x = ProsperRating..Alpha., 
       data = subset(loan, !is.na(ProsperScore)),
       xlab = 'Prosper Rating',
-      ylab = 'Count',
-      main = 'Prosper Rating of Borrower') +
-  geom_histogram(stat='count', fill= I('#FF82AB'), color='white')+
-  scale_x_discrete(limits = c('AA', 'A', 'B', 'C', 'D', 'E', 'HR'))
+      ylab = 'Count') +
+  geom_histogram(stat='count', fill= I('#FF82AB'), 
+                 color='white') +
+  scale_x_discrete(limits = c('AA', 'A', 'B', 
+                              'C', 'D', 'E', 'HR'))
 
 ```
 
@@ -149,20 +152,19 @@ Missing values are surprisingly high. After done the research, I found the Prosp
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 
-ggplot(aes(x = reorder(Occupation, Occupation, 
+ggplot(aes(x = reorder(BorrowerState, BorrowerState, 
                        function(x) - length(x)),
            fill = I("#FF82AB")), 
-       data = subset(loan,!is.na(Occupation))) +
+       data = subset(loan,!is.na(BorrowerState))) +
   geom_bar() +
-  xlab('Occupation of Borrower')  +
-  ggtitle('What is borrower occupation') +
+  xlab('Borrower State')  +
   coord_flip() +
   theme_bw() +
   theme(axis.text = element_text(size = 8))
 
 ```
 
-Apart from other occupations, professional occupies a large part of the count. Why loan providers prefer to lend the loan to professional? The reason behind is they have stable and high income compared to others whilst they work on more techniqual job, which show the strong debt paying ability.
+We can see from this plot that California has the most borrowers, then it's Texas, New York and Florida.
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 
@@ -208,8 +210,7 @@ ggplot(aes(x = CurrentDelinquencies), data = loan) +
                      breaks = seq(0, 16, 1)) +
   ylim(0, 12000) +
   xlab('Current Delinquency Times')  +
-  ylab('Count') +
-  ggtitle('How many times of current delinquency')
+  ylab('Count')
 
 ```
 
@@ -225,8 +226,7 @@ c1 <- ggplot(aes(x = DelinquenciesLast7Years),
                      breaks = seq(0, 40, 1)) +
   ylim(0, 7000) +
   xlab('Delinquency Last 7 Years')  +
-  ylab('Count') +
-  ggtitle('How many times of delinquency last 7 years')
+  ylab('Count') 
 
 c2 <- ggplot(aes(x = PublicRecordsLast10Years), 
              data = loan) +
@@ -236,8 +236,7 @@ c2 <- ggplot(aes(x = PublicRecordsLast10Years),
                      breaks = seq(0, 5, 1)) +
   ylim(0, 25000) +
   xlab('Public Delinquency Records Last 10 Years')  +
-  ylab('Count') +
-  ggtitle('How many times of public delinquency records last 10 years')
+  ylab('Count') 
 
 grid.arrange(c1, c2, nrow = 2)
 
@@ -254,8 +253,7 @@ ggplot(aes(x = BankcardUtilization),
                      breaks = seq(0, 1.4, 0.2)) +
   ylim(0, 8000) +
   xlab('Bank Card Utilization')  +
-  ylab('Count') +
-  ggtitle('How many times the borrower use the bank card')
+  ylab('Count') 
 
 ```
 
@@ -273,8 +271,7 @@ ggplot(aes(x = TradesNeverDelinquent..percentage.),
                      breaks = seq(0.3, 1.0, 0.05)) +
   ylim(0, 10000) +
   xlab('Trade Never Delinquent (percentage)')  +
-  ylab('Count') +
-  ggtitle('How many trades never delinquent')
+  ylab('Count') 
 
 ```
 
@@ -290,8 +287,7 @@ ggplot(aes(x = DebtToIncomeRatio),
                      breaks = seq(0, 1.0, 0.05)) +
   ylim(0, 15000) +
   xlab('Ratio of Debt and Income')  +
-  ylab('Count') +
-  ggtitle('What is the ratio of debt and income')
+  ylab('Count') 
 
 ```
 
@@ -306,7 +302,7 @@ The structure of the dataset covers the different loan interest rates, borrower'
 Main Features:
 1) Interest Rate: BorrowerAPR, BorrowerRate, LendYield
 2) Credit Rating: ProsperRating..Alpha., ProsperScore
-3) Loan Status: Term, LoanOriginalAmount, BorrowerState, LoanOriginationQuarter
+3) Loan Status: LoanOriginalAmount, BorrowerState, LoanOriginationQuarter
 4) Borrower Profile: IncomeRange, DebtToIncomeRatio, EmploymentStatus, MonthlyLoanPayment
 5) Delinquency Record: CurrentDelinquencies, DelinquenciesLast7Years, PublicRecordsLast12Months
 
