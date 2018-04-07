@@ -64,12 +64,12 @@ A basic exploration of the datset would give the following information
 ***
 ```{r echo=FALSE, message=FALSE, warning=FALSE, summary}
 
-names(loan)
 summary(loan)
 
 ```
 
 > The prosper loan data can allow me to explore:
+
 1) The difference in borrower APR, borrower rate and lender yield. 
 This shows the difference about what the actual interest rate the borrower haven.
 2) By examining the relationship between borrower income and loan payment, we can see how likely the borrower can repay a debt.
@@ -103,7 +103,7 @@ We can see that people normally lend the loan around 4,000, also 10,000 and 15,0
 
 qplot(x = LoanOriginalAmount, data = loan,
       binwidth = 1000, 
-      xlab = 'Loan Original Amount',
+      xlab = 'Loan Original Amount [USD]',
       ylab = 'Count',
       colour = I('#FCFCFC'), fill= I('#FF6EB4')) +
   scale_x_continuous(breaks = seq(0, 35000, 5000))
@@ -134,13 +134,11 @@ Over 60,000 borrowers are employed, full-time followed behind as the second. Ret
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 
 qplot(x = ProsperRating..Alpha., 
-      data = subset(loan, !is.na(ProsperScore)),
+      data = loan,
       xlab = 'Prosper Rating',
       ylab = 'Count') +
   geom_histogram(stat='count', fill= I('#FF82AB'), 
-                 color='white') +
-  scale_x_discrete(limits = c('AA', 'A', 'B', 
-                              'C', 'D', 'E', 'HR'))
+                 color='white')
 
 ```
 
@@ -191,7 +189,7 @@ ggplot(aes(x = AnnualIncome), data = loan) +
   scale_x_log10() +
   scale_x_continuous(lim = c(0, 150000), 
                      breaks = seq(0, 150000, 5000)) +
-  xlab('Annual Income')  +
+  xlab('Annual Income [USD]')  +
   ylab('Count') +
   ggtitle('Annual Income of Borrower') +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
@@ -295,30 +293,34 @@ We also want to know how much debt burden that our borrower carry. The distribut
 
 # Univariate Analysis
 
-### What is the structure of your dataset?
+> What is the structure of your dataset?
+
 The structure of the dataset covers the different loan interest rates, borrower's employment status and income, liability ratio, delinquency records, etc.
 
-### What is/are the main feature(s) of interest in your dataset?
-Main Features:
+> What is/are the main feature(s) of interest in your dataset?
+
 1) Interest Rate: BorrowerAPR, BorrowerRate, LendYield
 2) Credit Rating: ProsperRating..Alpha., ProsperScore
 3) Loan Status: LoanOriginalAmount, BorrowerState, LoanOriginationQuarter
 4) Borrower Profile: IncomeRange, DebtToIncomeRatio, EmploymentStatus, MonthlyLoanPayment
 5) Delinquency Record: CurrentDelinquencies, DelinquenciesLast7Years, PublicRecordsLast12Months
 
-### What other features in the dataset do you think will help support your \
+> What other features in the dataset do you think will help support your \
 investigation into your feature(s) of interest?
+
 1) LP_CustomerPayments, LP_CustomerPrincipalPayments, LP_InterestandFees, LP_ServicesFees
 Supporting to find how much profit the bank or loan providers can gain
 2) IsBorrowerHomeOwner, Occupation
 Supporting to find borrower's income source
 
-### Did you create any new variables from existing variables in the dataset?
+> Did you create any new variables from existing variables in the dataset?
+
 Created the annual income by calculating the stated monthly income
 
-### Of the features you investigated, were there any unusual distributions? \
+> Of the features you investigated, were there any unusual distributions? \
 Did you perform any operations on the data to tidy, adjust, or change the form \
 of the data? If so, why did you do this?
+
 I cleaned the income range data, because the not displayed income or null value will affect to see the percentage of each income range.
 I also excluded several missing values in few variables, such as: DebtToIncomeRatio, BankCardUtilization.
 
@@ -350,7 +352,7 @@ ggplot(aes(x = LoanOriginationQuarter,
                               'Q2 2012','Q3 2012','Q4 2012','Q1 2013',
                               'Q2 2013','Q3 2013','Q4 2013','Q1 2014')) +
   xlab('Quarter')  +
-  ylab('Loan Original Amount') +
+  ylab('Loan Amount [USD]') +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
 
 ```
@@ -362,7 +364,7 @@ Nevertheless, since 2010, the loan amount has an exponential growth. More and mo
 
 ggplot(aes(x = IncomeRange, y = DebtToIncomeRatio), 
        data = subset(loan, !is.na(DebtToIncomeRatio))) +
-  geom_boxplot(fill='#FF6EB4', color='#EEE685',
+  geom_boxplot(fill='#EEE685', color='#FF6EB4',
                outlier.colour = '#FF6EB4',
                outlier.shape = 4, outlier.size = 0.8) +
   scale_x_discrete(limits = c('$1-24,999', '$25,000-49,999', 
@@ -452,6 +454,23 @@ ggplot(aes(x = BorrowerState), data = loan) +
 
 We also care about which state has most borrower. The highest number of borrower is in CA, and it demonstrates that the California consumers have some of the higest levels of debt in the country. Moreover, the following Texas, New York and Florida can also be seen as a big loan market.
 
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+ggplot(aes(x = IncomeRange, y = LoanOriginalAmount),
+       data = subset(loan, 
+                     !is.na(IncomeRange))) +
+  geom_boxplot(fill='#EEE685', color='#FF6EB4') +
+  scale_x_discrete(
+    limits = c('Not employed', '$1-24,999', 
+               '$25,000-49,999', '$50,000-74,999', 
+               '$75,000-99,999', '$100,000+')) +
+  xlab('Income Range') +
+  ylab('Loan Amount [USD]') +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1)) 
+
+```
+Income over $100,000 has higher chance to ge the loan over $12,000. The highest loan amount can be over $35,000. It's interesting to see not employed borrower can get higher loan amount than the borrower income range is between $1-24,999.
+
 > Bank Profitability
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
@@ -463,7 +482,7 @@ ggplot(aes(x = LoanOriginationQuarter,
              fun.y = mean, 
              color = '#FF6EB4') +
   xlab('Quarter')  +
-  ylab('Interest and Fees') +
+  ylab('Interest and Fees [USD]') +
   scale_x_discrete(limits = c('Q1 2006','Q2 2006','Q3 2006',
                               'Q4 2006','Q1 2007','Q2 2007',
                               'Q3 2007','Q4 2007','Q1 2008',
@@ -479,8 +498,9 @@ ggplot(aes(x = LoanOriginationQuarter,
 
 ```
 
-The interest and fees follow the same pattern as the loan offering amount in the begining but different in the end. Interest and fees slightly increased from the end of 2006 to 2007. They also have been affected by the subprime mortgage crisis from 2008 to 2009 and had a significantly drop.
-From 2010 to 2011, the interest and fees kept growing, but had a huge jump from 2012 to 2014. The decrease in loan interest rates in 2012 was affected by the bank start to provide more loan to borrowers. Loan providers lost a lot of their financial market in US.
+The interest and fees follow the same pattern as the loan offering amount in the begining but different in the end. 
+Seen from this digram, we can see the interest and fees slightly increased from 2006 Q1 to 2007 Q2, then it slightly decreased utill 2008 Q4. However, unfortunately it dropped to the bottom in 2009 Q2 which has no any interest and fees at all. But it bounced back afterwards, utill 2011 Q2 it achieved the peak. However this thrive did not last long, it kept falling down after 2012 Q2.
+
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 
@@ -571,17 +591,20 @@ But it's strange to see the 100 times rdelinquencies have a low debt to income r
 
 # Bivariate Analysis
 
-### Talk about some of the relationships you observed in this part of the \
+> Talk about some of the relationships you observed in this part of the \
 investigation. How did the feature(s) of interest vary with other features in \
 the dataset?
+
 Borrowers who have lower income would burden heavier debt, according to the debt to income ratio and income range plot.
 
-### Did you observe any interesting relationships between the other features \
+> Did you observe any interesting relationships between the other features \
 (not the main feature(s) of interest)?
+
 It's interesting to see the loan original amount growed significantly from 2012 to 2014. 
 But on the contrary, the interest and fees went down dramatically from 2012 to 2014. Even they followed the same pattern as loan original amount before 2012.
 
-### What was the strongest relationship you found?
+> What was the strongest relationship you found?
+
 The prosper rating and borrower rates have the strongest relationship.
 
 # Multivariate Plots Section
@@ -620,7 +643,7 @@ ggplot(aes(x = LoanOriginalAmount,
        data = subset(loan.apr_by_income, 
                      !is.na(mean_BorrowerAPR))) +
   geom_point(aes(color = ProsperRating..Alpha.)) +
-  xlab('Loan Original Amount') +
+  xlab('Loan Amount [USD]') +
   ylab('Average Borrower APR') 
 
 ```
@@ -642,7 +665,7 @@ ggplot(aes(x = BorrowerState, y = mean_LenderYield),
        data = subset(loan.amount_by_state_yield, 
                      !is.na(BorrowerState))) +
   geom_boxplot(aes(color = LoanOriginalAmount), 
-               fill = I('#FF6EB4')) +
+               fill='#EEE685', color='#FF6EB4') +
   ylim(0, 0.35) +
   xlab('Borrower State') +
   ylab('Average Lender Yield') +
@@ -669,7 +692,7 @@ ggplot(aes(x = IncomeRange, y = mean_CurrentDelinquencies),
                      !is.na(IncomeRange) & 
                        IncomeRange != 'Not displayed')) +
   geom_boxplot(aes(color = DebtToIncomeRatio), 
-               color = I('#FF6EB4')) +
+               fill='#EEE685', color='#FF6EB4') +
   scale_y_continuous(trans = log10_trans()) +
   scale_x_discrete(
     limits = c('Not employed', '$1-24,999', 
@@ -683,15 +706,42 @@ ggplot(aes(x = IncomeRange, y = mean_CurrentDelinquencies),
 
 The average current delinquencies are very high amoung the $1-24,999 and $50,000-74,999 income group. The reason behind is these groups have more borrowers and vert high loan amount. But the $100,000+ income group is easier to occur delinquency, because this group uses the loan money to deal with block trade.
 
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+loan.loss_by_rate_delienquncy <- loan %>%
+  filter(!is.na(EstimatedLoss)) %>%
+  group_by(ProsperRating..Alpha., EstimatedLoss) %>%
+  summarise(mean_CurrentDelinquencies = 
+              mean(CurrentDelinquencies),
+            n = n()) %>%
+  ungroup() %>%
+  arrange(ProsperRating..Alpha.)
+head(loan.loss_by_rate_delienquncy, 50)
+
+ggplot(aes(x = ProsperRating..Alpha., 
+           y = mean_CurrentDelinquencies * 10,
+           fill = EstimatedLoss),
+       data = subset(loan.loss_by_rate_delienquncy,
+                     !is.na(ProsperRating..Alpha.))) +
+  geom_boxplot(fill='#EEE685', color='#FF6EB4') +
+  scale_x_discrete(limits = c('AA', 'A', 'B',
+                              'C', 'D', 'E', 'HR')) +
+  xlab('Prosper Rating') +
+  ylab('Average Current Delinquency')
+
+```
+The average current delinquency is very high if the prosper rating is Grade HR, then it's Grade E. Borrower graded AA has the least chance to delinquent.
+
 # Multivariate Analysis
 
-### Talk about some of the relationships you observed in this part of the \
-investigation. Were there features that strengthened each other in terms of \
+> Talk about some of the relationships you observed in this part of the investigation. 
+Were there features that strengthened each other in terms of \
 looking at your feature(s) of interest?
 
 I am glad to find the ralationships between interest rate and borrower who has different income group and prosper rating. It's meaningful because it gives loan provider some ideas about how to set price of the interest rate in terms of different customer quality.
 
-### Were there any interesting or surprising interactions between features?
+> Were there any interesting or surprising interactions between features?
+
 I found it is surprising to see borrower who is income is above $100,000 appears to be linked to high levels of delinquent. Before I think they have better capital strength that would not easily to have any delinquency.
 
 ------
@@ -701,34 +751,25 @@ I found it is surprising to see borrower who is income is above $100,000 appears
 ### Plot One
 ```{r echo=FALSE, message=FALSE, warning=FALSE, Plot_One}
 
-loan.income_by_amount <- loan %>%
-  filter(!is.na(IncomeRange)) %>%
-  group_by(IncomeRange) %>%
-  summarise(mean_LoanOriginalAmount = 
-              mean(LoanOriginalAmount),
-            n = n()) %>%
-  ungroup() %>%
-  arrange(IncomeRange)
-head(loan.income_by_amount, 50)
-
-ggplot(aes(x = IncomeRange, y = mean_LoanOriginalAmount),
-       data = subset(loan.income_by_amount, 
+ggplot(aes(x = IncomeRange, y = LoanOriginalAmount),
+       data = subset(loan, 
                      !is.na(IncomeRange))) +
-  geom_point(color = '#B22222', size = 2) +
+  geom_boxplot(color = '#8A2BE2') +
   scale_x_discrete(
     limits = c('Not employed', '$1-24,999', 
                '$25,000-49,999', '$50,000-74,999', 
                '$75,000-99,999', '$100,000+')) +
   xlab('Income Range') +
-  ylab('Average Loan Original Amount') +
+  ylab('Loan Amount [USD]') +
+  ggtitle('Income Range vs. Loan Amount [USD]') +
   theme(axis.text.x = element_text(angle = 30, hjust = 1)) 
 
 ```
 
 ### Description One
-Customer Quality
+> Customer Quality
 
-This plot shows the customer quality from two aspects: average loan original amount and income range. 
+This plot shows the customer quality from two aspects: loan original amount and income range. 
 Loan provider is interested in how much loan amount they can offer to customer and bacially this customer is in which income range.
 
 From this plot, we can see $1-24,999 income group is more likely to lend loan around $4300; $25,000-49,999 income group is more likely to lend loan around $6100; $50,000-74,999 income group is more likely to lend loan around $8800; $75,000-99,999 income group is more likely to lend loan around $11400; $100,000+ income group is more likely to lend loan around $13000.
@@ -737,156 +778,38 @@ From this plot, we can see $1-24,999 income group is more likely to lend loan ar
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE, Plot_Two}
 
-loan.di_by_income_rate.wide <- dcast(loan.di_by_income_rate,
-                                  IncomeRange ~ ProsperRating..Alpha.,
-                                  value.val = 'median_BorrowerAPR')
-
-loan.di_by_income_rate.wide <-
-  subset(loan.di_by_income_rate[c('IncomeRange', 
-                                  'ProsperRating..Alpha.', 
-                                  'median_BorrowerAPR')],
-         !is.na(ProsperRating..Alpha.)) %>%
-  spread(ProsperRating..Alpha., median_BorrowerAPR) %>%
-  mutate(ratio = AA / A)
-
-head(loan.di_by_income_rate.wide)
-
-pr1 <- ggplot(aes(x = IncomeRange, y = AA / A), 
-       data = subset(loan.di_by_income_rate.wide, 
-                     !is.na(IncomeRange) & 
-                       IncomeRange != 'Not displayed')) +
-  geom_point(color = '#FF0000') +
-  geom_hline(yintercept = 0.7, alpha = 0.3, linetype = 2) +
-  scale_x_discrete(
-    limits = c('Not employed', '$1-24,999', 
-               '$25,000-49,999', '$50,000-74,999', 
-               '$75,000-99,999', '$100,000+')) +
-  xlab('Income Range') +
-  ylab('Ratio: AA / A ') +
-  theme(axis.text.x = element_text(angle = 30, hjust = 1)) 
-
-loan.di_by_income_rate.wide <-
-  subset(loan.di_by_income_rate[c('IncomeRange', 
-                                  'ProsperRating..Alpha.', 
-                                  'median_BorrowerAPR')],
-         !is.na(ProsperRating..Alpha.)) %>%
-  spread(ProsperRating..Alpha., median_BorrowerAPR) %>%
-  mutate(ratio = A / B)
-
-pr2 <- ggplot(aes(x = IncomeRange, y = A / B), 
-       data = subset(loan.di_by_income_rate.wide, 
-                     !is.na(IncomeRange) & 
-                       IncomeRange != 'Not displayed')) +
-  geom_point(color = '#FF1493') +
-  geom_hline(yintercept = 0.75, alpha = 0.3, linetype = 2) +
-  scale_x_discrete(
-    limits = c('Not employed', '$1-24,999', 
-               '$25,000-49,999', '$50,000-74,999', 
-               '$75,000-99,999', '$100,000+')) +
-  xlab('Income Range') +
-  ylab('Ratio:A / B ') +
-  theme(axis.text.x = element_text(angle = 30, hjust = 1)) 
-
-loan.di_by_income_rate.wide <-
-  subset(loan.di_by_income_rate[c('IncomeRange', 
-                                  'ProsperRating..Alpha.', 
-                                  'median_BorrowerAPR')],
-         !is.na(ProsperRating..Alpha.)) %>%
-  spread(ProsperRating..Alpha., median_BorrowerAPR) %>%
-  mutate(ratio = B / C)
-
-pr3 <- ggplot(aes(x = IncomeRange, y = B / C), 
-       data = subset(loan.di_by_income_rate.wide,
-                     !is.na(IncomeRange) & 
-                       IncomeRange != 'Not displayed')) +
-  geom_point(color = '#EEEE00') +
-  geom_hline(yintercept = 0.8, alpha = 0.3, linetype = 2) +
-  scale_x_discrete(
-    limits = c('Not employed', '$1-24,999', 
-               '$25,000-49,999', '$50,000-74,999', 
-               '$75,000-99,999', '$100,000+')) +
-  xlab('Income Range') +
-  ylab('Ratio: B / C ') +
-  theme(axis.text.x = element_text(angle = 30, hjust = 1)) 
-
-loan.di_by_income_rate.wide <-
-  subset(loan.di_by_income_rate[c('IncomeRange', 
-                                  'ProsperRating..Alpha.', 
-                                  'median_BorrowerAPR')],
-         !is.na(ProsperRating..Alpha.)) %>%
-  spread(ProsperRating..Alpha., median_BorrowerAPR) %>%
-  mutate(ratio = C / D)
-
-pr4 <- ggplot(aes(x = IncomeRange, y = C / D), 
-       data = subset(loan.di_by_income_rate.wide, 
-                     !is.na(IncomeRange) & 
-                       IncomeRange != 'Not displayed')) +
-  geom_point(color = '#66CD00') +
-  geom_hline(yintercept = 0.8, alpha = 0.3, linetype = 2) +
-  scale_x_discrete(
-    limits = c('Not employed', '$1-24,999', 
-               '$25,000-49,999', '$50,000-74,999', 
-               '$75,000-99,999', '$100,000+')) +
-  xlab('Income Range') +
-  ylab('Ratio: C / D ') +
-  theme(axis.text.x = element_text(angle = 30, hjust = 1)) 
-
-loan.di_by_income_rate.wide <-
-  subset(loan.di_by_income_rate[c('IncomeRange', 
-                                  'ProsperRating..Alpha.', 
-                                  'median_BorrowerAPR')],
-         !is.na(ProsperRating..Alpha.)) %>%
-  spread(ProsperRating..Alpha., median_BorrowerAPR) %>%
-  mutate(ratio = D / E)
-
-pr5 <- ggplot(aes(x = IncomeRange, y = D / E), 
-       data = subset(loan.di_by_income_rate.wide, 
-                     !is.na(IncomeRange) & 
-                       IncomeRange != 'Not displayed')) +
-  geom_point(color = '#5CACEE') +
-  geom_hline(yintercept = 0.85, alpha = 0.3, linetype = 2) +
-  scale_x_discrete(
-    limits = c('Not employed', '$1-24,999', 
-               '$25,000-49,999', '$50,000-74,999', 
-               '$75,000-99,999', '$100,000+')) +
-  xlab('Income Range') +
-  ylab('Ratio: D / E ') +
-  theme(axis.text.x = element_text(angle = 30, hjust = 1)) 
-
-loan.di_by_income_rate.wide <-
-  subset(loan.di_by_income_rate[c('IncomeRange', 
-                                  'ProsperRating..Alpha.', 
-                                  'median_BorrowerAPR')],
-         !is.na(ProsperRating..Alpha.)) %>%
-  spread(ProsperRating..Alpha., median_BorrowerAPR) %>%
-  mutate(ratio = E / HR)
-
-pr6 <- ggplot(aes(x = IncomeRange, y = E / HR), 
-       data = subset(loan.di_by_income_rate.wide, 
-                     !is.na(IncomeRange) & 
-                       IncomeRange != 'Not displayed')) +
-  geom_point(color = '#9A32CD') +
-  geom_hline(yintercept = 0.95, alpha = 0.3, linetype = 2) +
-  scale_x_discrete(
-    limits = c('Not employed', '$1-24,999', 
-               '$25,000-49,999', '$50,000-74,999', 
-               '$75,000-99,999', '$100,000+')) +
-  xlab('Income Range') +
-  ylab('Ratio: E / HR ') +
-  theme(axis.text.x = element_text(angle = 30, hjust = 1))
-
-grid.arrange(pr1, pr2, pr3, pr4, pr5, pr6, ncol = 2)
+ggplot(aes(x = LoanOriginationQuarter, 
+           y = LP_InterestandFees), 
+       data = loan) +
+  geom_point(stat = "summary", 
+             fun.y = mean, 
+             color = '#00CD66') +
+  xlab('Quarter')  +
+  ylab('Interest and Fees [USD]') +
+  ggtitle('Quarterly Interest and Fees') +
+  scale_x_discrete(limits = c('Q1 2006','Q2 2006','Q3 2006',
+                              'Q4 2006','Q1 2007','Q2 2007',
+                              'Q3 2007','Q4 2007','Q1 2008',
+                              'Q2 2008','Q3 2008','Q4 2008',
+                              'Q2 2009','Q3 2009','Q4 2009',
+                              'Q1 2010','Q2 2010','Q3 2010',
+                              'Q4 2010','Q1 2011','Q2 2011',
+                              'Q3 2011','Q4 2011','Q1 2012',
+                              'Q2 2012','Q3 2012','Q4 2012',
+                              'Q1 2013','Q2 2013','Q3 2013',
+                              'Q4 2013','Q1 2014')) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
 
 ```
 
 ### Description Two
-Loan Provider Profitability
+> Loan Provider Profitability
 
-This time I want to know how different between two similar prosper ratings. So I compared each pair of prosper ratings, such as: AA and A, A and B, etc. We can see the prosper rating ratio increases from 0.65 to 0.95. Especially, there is a big gap from AA/A to A/B.
+This time I want to know how much loan provider can earn from lending loans. So I checked average interest and fees from 2006 Q1 to 2014 Q1. What I found is: interest and fees slightly increased from the end of 2006 to 2007. It shows it has been affected by the subprime mortgage crisis from 2008 to 2009 and had a significantly drop. 
 
-In terms of the variety of income range, A/B and D/E ratio go up with the income range. B/C ratio goes up with the income range but significantly drop in the end. C/D and E/HR ratio go down with the income range. AA/A ratio almost stays the same.
+But what is exciting is that from 2010 to 2011, the interest and fees kept growing, but had a huge jump from 2012 to 2014. The decrease in loan interest rates in 2012 was affected by the bank start to provide more loan to borrowers. Loan providers lost a lot of their financial market in US.
 
-Based on this diagram, we can find the perfect borrower APR for each borrower with differet income and prosper rating. This is also important for loan providers to measure their profitability.
+Based on this diagram, we can find the loan provider profitability heavily affected by the financial market. This is also important for loan providers to measure their profitability.
 
 ### Plot Three
 ```{r echo=FALSE, message=FALSE, warning=FALSE, Plot_Three}
@@ -902,27 +825,37 @@ loan.loss_by_rate_delienquncy <- loan %>%
 head(loan.loss_by_rate_delienquncy, 50)
 
 ggplot(aes(x = ProsperRating..Alpha., 
-           y = mean_CurrentDelinquencies * 10),
+           y = mean_CurrentDelinquencies * 10,
+           fill = EstimatedLoss),
        data = subset(loan.loss_by_rate_delienquncy,
                      !is.na(ProsperRating..Alpha.))) +
-  geom_point(aes(color = EstimatedLoss), size = 1.5) +
+  geom_boxplot(color = I('#1C86EE')) +
   scale_x_discrete(limits = c('AA', 'A', 'B',
                               'C', 'D', 'E', 'HR')) +
   xlab('Prosper Rating') +
-  ylab('Average Current Delinquencies') 
+  ylab('Average Current Delinquency') +
+  ggtitle('The relationship between prosper rating and average current delinquencies')
 
 ```
 
 ### Description Three
-Credit Risk
+> Credit Risk
+
 The estimated loss of AA prosper rating has the lowest delinquencies. 
 The distribution of prosper rating B, C, E and HR is scattered distribution. 
 The prosper rating HR has the highest estimated loss above 0.3 and the highest average current delinquencies over 24 times. 
 This plot can show the credit risk and profit loss regarding different prosper rating of borrower.
+This distribution is rational distributed.
 ------
 
 # Reflection
 
 In this report, I am glad to find the relationships between prosper rating and interest rate, delinquency and income range, delinquency and debt to income ratio, income range and loan amount.
+
+During this EDA project, I struggled with choice of plot type, variables, and aesthetic parameters (e.g. bin width, color, axis breaks),and I tried so hard to make each plot appropriately display. I also considered how to avoid overploting and how to make sure the axis label not be cut off. Specially, in bivariate and multivariate analysis section, I need to keep follow my logic and pick the right variable to show 'Customer Quality', 'Loan Provider Profitability', and 'Credit Risk' outcomes.
+
+What I successfully achieve, it's to understand which type of plot goes with univariate plot and which goes with bivariate plot.
+I successfully showed the borrower basic profile, displayed the interest rate, loan amount across state and employment status.
+Further I successfully demonstrated the relationship between prosper rating adn current delinquency records.
 
 In the future, I am keen to explore how to set a certain interest rate on different quality customers.  
